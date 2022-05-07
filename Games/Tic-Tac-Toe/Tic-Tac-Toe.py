@@ -31,7 +31,7 @@ class TicTacToe:
 
         tk.mainloop()
 
-    def pressed(self, row, col):
+    def clicked(self, row, col):
         if not self.isDone and self.cells[row][col]['text'] == ' ':     # empty
             if self.turn:   # X
                 self.cells[row][col]['image'] = self.xImage
@@ -53,7 +53,8 @@ class TicTacToe:
                 self.result.set('O 차례')
 
     
-    def check(self):
+    def check(self):    # check same shape
+        # check horizon and vertical
         for i in range(3):
             cell = self.cells[i][0]['text']
             if cell != ' ' and cell == self.cells[i][1]['text'] and cell == self.cells[i][2]['text']:
@@ -62,21 +63,23 @@ class TicTacToe:
             if cell != ' ' and cell == self.cells[1][i]['text'] and cell == self.cells[2][i]['text']:
                 return cell
         
+        # check diagonal
         cell = self.cells[1][1]['text']
         if cell != ' ' and cell == self.cells[0][0]['text'] and cell == self.cells[2][2]['text']:
             return cell
         if cell != ' ' and cell == self.cells[0][2]['text'] and cell == self.cells[2][0]['text']:
             return cell
         
-        flag = True
+        # Is Drawn or In Progress
+        IsDrawn = True 
         for i in range(3):
             for j in range(3):
                 if self.cells[i][j]['text'] == ' ':
-                    flag = False
+                    IsDrawn = False
                     break
-            if flag == False:
+            if IsDrawn == False:
                 break
-        if flag:
+        if IsDrawn:
             return '@'
 
         return ' '
