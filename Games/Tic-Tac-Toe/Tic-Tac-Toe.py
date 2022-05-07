@@ -2,19 +2,20 @@ from tkinter import *
 
 class TicTacToe:
     def __init__(self):         # initiating window
+        # frame
         tk = Tk()
-
         frame = Frame(tk)
         frame.pack()
+
+        # variables
+        self.cells = []
+        self.turn = True    # true: X, false: O
+        self.isDone = False
         
         # image load
         self.xImage = PhotoImage(file='image/x.gif')        # X image
         self.oImage = PhotoImage(file='image/o.gif')        # O image
         self.eImage = PhotoImage(file='image/empty.gif')    # empty image
-        
-        self.cells = []
-        self.turn = True
-        self.done = False
 
         # cells
         for i in range(3):
@@ -26,17 +27,16 @@ class TicTacToe:
         # result
         self.result = StringVar()
         self.result.set('X 차례')
-
         Label(tk, textvariable=self.result).pack()
 
         tk.mainloop()
 
     def pressed(self, row, col):
-        if not self.done and self.cells[row][col]['text'] == ' ':
-            if self.turn:
+        if not self.isDone and self.cells[row][col]['text'] == ' ':     # empty
+            if self.turn:   # X
                 self.cells[row][col]['image'] = self.xImage
                 self.cells[row][col]['text'] = 'X'
-            else:
+            else:           # O
                 self.cells[row][col]['image'] = self.oImage
                 self.cells[row][col]['text'] = 'O'
 
@@ -46,7 +46,7 @@ class TicTacToe:
                 self.result.set('비김! 게임이 끝났습니다')
             elif self.check() != ' ':
                 self.result.set(self.check()+' 승리! 게임이 끝났습니다')
-                self.done = True
+                self.isDone = True
             elif self.turn:
                 self.result.set('X 차례')
             else:
@@ -55,18 +55,18 @@ class TicTacToe:
     
     def check(self):
         for i in range(3):
-            ch = self.cells[i][0]['text']
-            if ch != ' ' and ch == self.cells[i][1]['text'] and ch == self.cells[i][2]['text']:
-                return ch
-            ch = self.cells[0][i]['text']
-            if ch != ' ' and ch == self.cells[1][i]['text'] and ch == self.cells[2][i]['text']:
-                return ch
+            cell = self.cells[i][0]['text']
+            if cell != ' ' and cell == self.cells[i][1]['text'] and cell == self.cells[i][2]['text']:
+                return cell
+            cell = self.cells[0][i]['text']
+            if cell != ' ' and cell == self.cells[1][i]['text'] and cell == self.cells[2][i]['text']:
+                return cell
         
-        ch = self.cells[1][1]['text']
-        if ch != ' ' and ch == self.cells[0][0]['text'] and ch == self.cells[2][2]['text']:
-            return ch
-        if ch != ' ' and ch == self.cells[0][2]['text'] and ch == self.cells[2][0]['text']:
-            return ch
+        cell = self.cells[1][1]['text']
+        if cell != ' ' and cell == self.cells[0][0]['text'] and cell == self.cells[2][2]['text']:
+            return cell
+        if cell != ' ' and cell == self.cells[0][2]['text'] and cell == self.cells[2][0]['text']:
+            return cell
         
         flag = True
         for i in range(3):
@@ -80,14 +80,5 @@ class TicTacToe:
             return '@'
 
         return ' '
-
-    def refresh(self):
-        self.turn = True
-        self.done = False
-        self.result.set('X 차례')
-        for i in range(3):
-            for j in range(3):
-                self.matrix[i][j]['image'] = self.eImage
-                self.matrix[i][j]['text'] = ' '
             
 TicTacToe()
