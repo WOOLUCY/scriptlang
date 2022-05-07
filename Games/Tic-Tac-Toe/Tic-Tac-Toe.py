@@ -51,7 +51,42 @@ class Main:
             else:
                 self.explain.set('플레이어 O 차례')
 
-        
     
+    def check(self):
+        for i in range(3):
+            ch = self.matrix[i][0]['text']
+            if ch != ' ' and ch == self.matrix[i][1]['text'] and ch == self.matrix[i][2]['text']:
+                return ch
+            ch = self.matrix[0][i]['text']
+            if ch != ' ' and ch == self.matrix[1][i]['text'] and ch == self.matrix[2][i]['text']:
+                return ch
+        
+        ch = self.matrix[1][1]['text']
+        if ch != ' ' and ch == self.matrix[0][0]['text'] and ch == self.matrix[2][2]['text']:
+            return ch
+        if ch != ' ' and ch == self.matrix[0][2]['text'] and ch == self.matrix[2][0]['text']:
+            return ch
+        
+        flag = True
+        for i in range(3):
+            for j in range(3):
+                if self.matrix[i][j]['text'] == ' ':
+                    flag = False
+                    break
+            if flag == False:
+                break
+        if flag:
+            return '@'
 
+        return ' '
+
+    def refresh(self):
+        self.turn = True
+        self.done = False
+        self.explain.set('플레이어 X 차례')
+        for i in range(3):
+            for j in range(3):
+                self.matrix[i][j]['image'] = self.eImage
+                self.matrix[i][j]['text'] = ' '
+            
 Main()
