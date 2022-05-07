@@ -1,7 +1,7 @@
 from tkinter import *
 
 class TicTacToe:
-    def __init__(self):         # initiating window
+    def __init__(self):     # initiating window
         # frame
         tk = Tk()
         frame = Frame(tk)
@@ -21,7 +21,7 @@ class TicTacToe:
         for i in range(3):
             self.cells.append([])
             for j in range(3):
-                self.cells[i].append(Button(frame, image=self.eImage, text=' ', command= lambda row=i, col=j: self.pressed(row, col)))
+                self.cells[i].append(Button(frame, image=self.eImage, text=' ', command= lambda row=i, col=j: self.clicked(row, col)))
                 self.cells[i][j].grid(row=i, column=j)
         
         # result
@@ -42,7 +42,7 @@ class TicTacToe:
 
             self.turn = not self.turn
 
-            if self.check() == '@':
+            if self.check() == '*':
                 self.result.set('비김! 게임이 끝났습니다')
             elif self.check() != ' ':
                 self.result.set(self.check()+' 승리! 게임이 끝났습니다')
@@ -80,8 +80,9 @@ class TicTacToe:
             if IsDrawn == False:
                 break
         if IsDrawn:
-            return '@'
+            return '*'
 
         return ' '
-            
+
+# Main       
 TicTacToe()
