@@ -29,6 +29,28 @@ class Main:
         Button(window, text='다시 시작', command=self.refresh).pack()
 
         window.mainloop()
+
+    def pressed(self, row, col):
+        if not self.done and self.matrix[row][col]['text'] == ' ':
+            if self.turn:
+                self.matrix[row][col]['image'] = self.xImage
+                self.matrix[row][col]['text'] = 'X'
+            else:
+                self.matrix[row][col]['image'] = self.oImage
+                self.matrix[row][col]['text'] = 'O'
+
+            self.turn = not self.turn
+
+            if self.check() == '@':
+                self.explain.set('비겼습니다.')
+            elif self.check() != ' ':
+                self.explain.set(self.check()+'가 이겼습니다.')
+                self.done = True
+            elif self.turn:
+                self.explain.set('플레이어 X 차례')
+            else:
+                self.explain.set('플레이어 O 차례')
+
         
     
 
