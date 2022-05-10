@@ -7,7 +7,7 @@ class TicTacToe:
         frame = Frame(tk)
         frame.pack()
 
-        # variableshht
+        # variables
         self.cells = []
         self.turn = True    # true: X, false: O
         self.isDone = False
