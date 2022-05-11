@@ -9,9 +9,9 @@ class Main():
         frame.pack()
 
         self.matrix = []
-        self.imageX = PhotoImage(file='image/x.gif')
-        self.imageO = PhotoImage(file='image/o.gif')
-        self.imageE = PhotoImage(file='image/empty.gif')
+        self.xImage = PhotoImage(file='image/x.gif')
+        self.oImage = PhotoImage(file='image/o.gif')
+        self.eImage = PhotoImage(file='image/empty.gif')
 
         self.turn = True
         for i in range(6):
@@ -30,7 +30,7 @@ class Main():
     def refresh():  # todo: 새로 시작 함수 추가
         pass
 
-    def clicked():  # todo: 눌렸을 시 함수 추가
+    def clicked(self, row, col):  # todo: 눌렸을 시 함수 추가
         pass
 
 Main()
