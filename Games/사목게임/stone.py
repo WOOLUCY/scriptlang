@@ -24,4 +24,13 @@ class Main():
 
         tk.mainloop()
 
+    def check():    # todo: 체크 함수 추가
+        pass
+
+    def refresh():  # todo: 새로 시작 함수 추가
+        pass
+
+    def clicked():  # todo: 눌렸을 시 함수 추가
+        pass
+
 Main()
