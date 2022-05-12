@@ -17,7 +17,9 @@ class Main():
         for i in range(6):
             self.matrix.append([])
             for j in range(7):
-                self.matrix[i].append(Button(frame, text=' ', image=self.imageE))   # clicked 추가
+                self.matrix[i].append(Button(frame, text=' ', 
+                image=self.eImage, command= lambda row=i, col= j:self.clicked(row, col)))   # clicked 추가
+                
                 self.matrix[i][j].grid(row=i, column=j)
         
         Button(tk, text='새로 시작').pack() # refresh 추가
@@ -31,6 +33,7 @@ class Main():
         pass
 
     def clicked(self, row, col):  # todo: 눌렸을 시 함수 추가
-        pass
+        self.matrix[row][col]['image'] = self.xImage
+        
 
 Main()
