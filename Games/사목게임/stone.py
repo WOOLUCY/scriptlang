@@ -1,84 +1,48 @@
 from tkinter import * # Import tkinter
 
-class Cell(Label):
-    def __init__(self, container):
-        Label.__init__(self, container, image = _images[' '])
-        self.bind("<Button-1>", self.flip)
-        self.token = " "
-      
-    def flip(self, event):
-        global currentToken, statusLabel
-        if self.token == " " and currentToken != "Over":
-            self.token = currentToken
-            self["image"] = _images[self.token]
-            currentToken = "X" if (currentToken == "O") else "O"
-            statusLabel["text"] = currentToken+" 차례"
-                
-        checkStatus(self.token)
+class Cell(Canvas):
+    def __init__(self, parent, row, col, width = 20, height = 20):
+        Canvas.__init__(self, parent, width = width, height = height, \
+        bg = "blue", borderwidth = 2)
 
-def checkStatus(token):
-    global currentToken
-    if isWon(token):
-        statusLabel["text"] = token + " 승리! 게임이 끝났습니다"
-        currentToken = "Over"
-    elif isFull():
-        statusLabel["text"] = "비김! 게임이 끝났습니다"
-        currentToken = "Over"
-        
-# Determine whether the cells are all occupied 
-def isFull():
-    for i in range(3):
-        for j in range(3):
-            if cells[i][j].token == ' ':
-                return False
+        self.color = "white"
+        self.row = row
+        self.col = col
 
-    return True
+        self.create_oval(4, 4, 20, 20, fill = "white", tags="oval")
+        self.bind("<Button-1>", self.clicked)
 
-# Determine whether the player with the specified token wins 
-def isWon(token):
-    for i in range(3):
-        if cells[i][0].token == token and cells[i][1].token == token \
-            and cells[i][2].token == token:
-            return True
+    def clicked(self, event): # red 또는 yellow 돌 놓기.
+        nextcolor = "red" if self.color != "red" else "yellow"
+        self.setColor(nextcolor)
 
-    for j in range(3):
-      if cells[0][j].token == token and cells[1][j].token == token \
-          and cells[2][j].token == token:
-        return True
+    def setColor(self, color):
+        self.delete("oval") 
+        self.color = color
+        self.create_oval(4, 4, 20, 20, fill = self.color, tags="oval")
 
-    if cells[0][0].token == token and cells[1][1].token == token \
-        and cells[2][2].token == token:
-      return True
+# Global Variables
+_MAXROW = 6
+_MAXCOL = 7
 
-    if cells[0][2].token == token and cells[1][1].token == token \
-        and cells[2][0].token == token:
-      return True
-
-    return False
-
-window = Tk() # Create a window
-window.title("TicTacToe") # Set title
-
-_images = {' ': None, 'X': None, 'O': None }
-_images['X'] = PhotoImage(file = "image/x.gif")
-_images['O'] = PhotoImage(file = "image/o.gif")
-_images[' '] = PhotoImage(file = "image/empty.gif")
-
-# 게임 진행 토큰 : 현재 차례에 따라 "X" 또는 "O"를 가지다가 게임이 끝나면 "Over"를 가짐.
-currentToken = "X"
-    
-frame = Frame(window)
-frame.pack()
-
+turn = "red"    # 다음 놓을 차례 (red, yellow, none(game over))
 cells = []
-for i in range(3):
-    cells.append([])
-    for j in range(3):
-        cells[i].append(Cell(frame))
-        cells[i][j].grid(row = i, column = j)
 
-statusLabel = Label(window, text = "Game status: continue")
-statusLabel["text"] = currentToken+" 차례"
-statusLabel.pack()
+process_button = None   # 하단의 버튼
+restart_text = "새로 시작"
+
+
+
+# loop
+window = Tk() # Create a window
+window.title("Connect Four") # Set title
+
+frame1 = Frame(window)
+frame1.pack()
+
+cell = Cell(frame1, 0, 0, width = 20, height = 20)
+cell.grid(row = 0, column = 0)
+
+Button(window, text = restart_text).pack()  # restart button
 
 window.mainloop() # Create an event loop
