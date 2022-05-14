@@ -9,13 +9,16 @@ class Cell(Canvas):
         self.color = "white"
         self.row = row
         self.col = col
+        self.isEmpty = True
 
         self.create_oval(4, 4, 20, 20, fill = "white", tags="oval")
         self.bind("<Button-1>", self.clicked)
 
     def clicked(self, event): # red 또는 yellow 돌 놓기.
-        nextcolor = "red" if self.color != "red" else "yellow"
-        self.setColor(nextcolor)
+        if self.isEmpty:
+            nextcolor = "red" if self.color != "red" else "yellow"
+            self.setColor(nextcolor)
+            self.isEmpty = False
 
     def setColor(self, color):
         self.delete("oval") 
