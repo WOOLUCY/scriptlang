@@ -1,4 +1,5 @@
-from tkinter import * # Import tkinter
+from tkinter import *
+from tkinter.tix import COLUMN # Import tkinter
 
 class Cell(Canvas):
     def __init__(self, parent, row, col, width = 20, height = 20):
@@ -21,17 +22,27 @@ class Cell(Canvas):
         self.color = color
         self.create_oval(4, 4, 20, 20, fill = self.color, tags="oval")
 
+    def __checkVertical(self):  # 열 방향 확인
+        pass
+
+    def __Horizontal(self):     # 행 방향 확인
+        pass
+
+    def __checkDiag1(self):     # /방향 대각선 확인
+        pass
+
+    def __checkDiag2(self):     # \방향 대각선 확인
+        pass
+
+def restart():
+    print("새로 시작")
+
 # Global Variables
 _MAXROW = 6
 _MAXCOL = 7
 
 turn = "red"    # 다음 놓을 차례 (red, yellow, none(game over))
 cells = []
-
-process_button = None   # 하단의 버튼
-restart_text = "새로 시작"
-
-
 
 # loop
 window = Tk() # Create a window
@@ -40,9 +51,16 @@ window.title("Connect Four") # Set title
 frame1 = Frame(window)
 frame1.pack()
 
-cell = Cell(frame1, 0, 0, width = 20, height = 20)
-cell.grid(row = 0, column = 0)
+# cell = Cell(frame1, 0, 0, width = 20, height = 20)
+# cell.grid(row = 0, column = 0)
 
-Button(window, text = restart_text).pack()  # restart button
+for i in range(6):
+    cells.append([])
+    for j in range(7):
+        cells[i].append(Cell(frame1, i, j, width = 20, height = 20))
+        cells[i][j].grid(row=i, column=j)
+
+restart_text = "새로 시작"
+process_button = Button(window, text = restart_text, command=restart).pack()  # restart button
 
 window.mainloop() # Create an event loop
