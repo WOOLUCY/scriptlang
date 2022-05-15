@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter.tix import COLUMN # Import tkinter
 
 class Cell(Canvas):
     def __init__(self, parent, row, col, width = 20, height = 20):
@@ -118,26 +117,20 @@ def restart():
     done = False
     process_button["text"] = restart_text
 
-
-
-
 # Global Variables
 _MAXROW = 6
 _MAXCOL = 7
 
-turn = "red"    # 다음 놓을 차례 (red, yellow, none(game over))
-cells = []
+turn = "red"    # next turn (red, yellow, none(game over))
+cells = []      # matrix
 done = False    # flag for game over
 
 # loop
-window = Tk() # Create a window
+window = Tk()   # Create a window
 window.title("Connect Four") # Set title
 
 frame1 = Frame(window)
 frame1.pack()
-
-# cell = Cell(frame1, 0, 0, width = 20, height = 20)
-# cell.grid(row = 0, column = 0)
 
 for i in range(_MAXROW):
     cells.append([])
