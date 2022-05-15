@@ -29,7 +29,6 @@ class Cell(Canvas):
                     turn = "yellow"
                 elif turn == "yellow":
                     turn = "red"    
-            print(turn)
 
             if self.check():
                 if turn == "red":
@@ -43,21 +42,20 @@ class Cell(Canvas):
         self.color = color
         self.create_oval(7, 7, 20, 20, fill = self.color, tags="oval")
 
-    def setBG(self):
-        self.configure(bg = self.color)
+    def setBG(self, color):
+        self.configure(bg = color)
 
-    def check(self):
-        global cells
+    def check(self):        # check and change background color
         for i in range(6):
             for j in range(4):
                 if cells[i][j].color != 'white' and\
                     cells[i][j].color == cells[i][j+1].color and\
                     cells[i][j].color == cells[i][j+2].color and\
                     cells[i][j].color == cells[i][j+3].color:
-                    cells[i][j].setBG()
-                    cells[i][j+1].setBG()
-                    cells[i][j+2].setBG()
-                    cells[i][j+3].setBG()
+                    cells[i][j].setBG(self.color)
+                    cells[i][j+1].setBG(self.color)
+                    cells[i][j+2].setBG(self.color)
+                    cells[i][j+3].setBG(self.color)
                     return True
 
         for i in range(3):
@@ -66,10 +64,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j].color and\
                     cells[i][j].color == cells[i+2][j].color and\
                     cells[i][j].color == cells[i+3][j].color:
-                    cells[i][j].setBG()
-                    cells[i+1][j].setBG()
-                    cells[i+2][j].setBG()
-                    cells[i+3][j].setBG()
+                    cells[i][j].setBG(self.color)
+                    cells[i+1][j].setBG(self.color)
+                    cells[i+2][j].setBG(self.color)
+                    cells[i+3][j].setBG(self.color)
                     return True
 
         for i in range(3):
@@ -78,10 +76,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j+1].color and\
                     cells[i][j].color == cells[i+2][j+2].color and\
                     cells[i][j].color == cells[i+3][j+3].color:
-                    cells[i][j].setBG()
-                    cells[i+1][j+1].setBG()
-                    cells[i+2][j+2].setBG()
-                    cells[i+3][j+3].setBG()
+                    cells[i][j].setBG(self.color)
+                    cells[i+1][j+1].setBG(self.color)
+                    cells[i+2][j+2].setBG(self.color)
+                    cells[i+3][j+3].setBG(self.color)
                     return True
 
         for i in range(3):
@@ -90,14 +88,38 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j-1].color and\
                     cells[i][j].color == cells[i+2][j-2].color and\
                     cells[i][j].color == cells[i+3][j-3].color:
-                    cells[i][j].setBG()
-                    cells[i+1][j-1].setBG()
-                    cells[i+2][j-2].setBG()
-                    cells[i+3][j-3].setBG()
+                    cells[i][j].setBG(self.color)
+                    cells[i+1][j-1].setBG(self.color)
+                    cells[i+2][j-2].setBG(self.color)
+                    cells[i+3][j-3].setBG(self.color)
                     return True
 
+        # check draw
+        dFlag = True
+        for i in range(_MAXROW):
+            for j in range(_MAXCOL):
+                if cells[i][j].isEmpty:
+                    dFlag = False
+                    break
+            if dFlag == False:
+                break
+        if dFlag:
+            process_button["text"] = draw_text
+
 def restart():
-    print("새로 시작")
+    global turn, done
+    for i in range(_MAXROW):
+        for j in range(_MAXCOL):
+            cells[i][j].setColor("white")
+            cells[i][j].isEmpty = True
+            cells[i][j].setBG("blue")
+            
+    turn = "red"
+    done = False
+    process_button["text"] = restart_text
+
+
+
 
 # Global Variables
 _MAXROW = 6
@@ -117,9 +139,9 @@ frame1.pack()
 # cell = Cell(frame1, 0, 0, width = 20, height = 20)
 # cell.grid(row = 0, column = 0)
 
-for i in range(6):
+for i in range(_MAXROW):
     cells.append([])
-    for j in range(7):
+    for j in range(_MAXCOL):
         cells[i].append(Cell(frame1, i, j, width = 20, height = 20))
         cells[i][j].grid(row=i, column=j)
 
@@ -127,8 +149,9 @@ for i in range(6):
 restart_text = "새로 시작"
 red_text = "red 승리!"
 yellow_text = "yellow 승리!"
+draw_text = "승자가 없습니다"
 
-process_button = Button(window, text = restart_text)
+process_button = Button(window, text = restart_text, command=restart)
 process_button.pack()
 
 window.mainloop() # Create an event loop
