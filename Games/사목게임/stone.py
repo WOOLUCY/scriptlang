@@ -43,6 +43,9 @@ class Cell(Canvas):
         self.color = color
         self.create_oval(7, 7, 20, 20, fill = self.color, tags="oval")
 
+    def setBG(self):
+        self.configure(bg = self.color)
+
     def check(self):
         global cells
         for i in range(6):
@@ -51,6 +54,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i][j+1].color and\
                     cells[i][j].color == cells[i][j+2].color and\
                     cells[i][j].color == cells[i][j+3].color:
+                    cells[i][j].setBG()
+                    cells[i][j+1].setBG()
+                    cells[i][j+2].setBG()
+                    cells[i][j+3].setBG()
                     return True
 
         for i in range(3):
@@ -59,6 +66,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j].color and\
                     cells[i][j].color == cells[i+2][j].color and\
                     cells[i][j].color == cells[i+3][j].color:
+                    cells[i][j].setBG()
+                    cells[i+1][j].setBG()
+                    cells[i+2][j].setBG()
+                    cells[i+3][j].setBG()
                     return True
 
         for i in range(3):
@@ -67,6 +78,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j+1].color and\
                     cells[i][j].color == cells[i+2][j+2].color and\
                     cells[i][j].color == cells[i+3][j+3].color:
+                    cells[i][j].setBG()
+                    cells[i+1][j+1].setBG()
+                    cells[i+2][j+2].setBG()
+                    cells[i+3][j+3].setBG()
                     return True
 
         for i in range(3):
@@ -75,6 +90,10 @@ class Cell(Canvas):
                     cells[i][j].color == cells[i+1][j-1].color and\
                     cells[i][j].color == cells[i+2][j-2].color and\
                     cells[i][j].color == cells[i+3][j-3].color:
+                    cells[i][j].setBG()
+                    cells[i+1][j-1].setBG()
+                    cells[i+2][j-2].setBG()
+                    cells[i+3][j-3].setBG()
                     return True
 
 def restart():
