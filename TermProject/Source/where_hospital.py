@@ -6,14 +6,15 @@ window = Tk()
 window.title("어디 병원")
 window.geometry("800x600+450+200")
 window.resizable(False, False)
+window.configure(bg='white')
 
-
-emailImage = PhotoImage(file='image/email.png')     # gmail image
-mapImage = PhotoImage(file='image/map2.png')        # naver map image
-logoImage = PhotoImage(file='image/logo.png')       # logo image
+searchImage = PhotoImage(file='image/search.png')    # search image
+emailImage = PhotoImage(file='image/mail.png')     # gmail image
+mapImage = PhotoImage(file='image/map.png')        # naver map image
+logoImage = PhotoImage(file='image/logo.png')      # logo image
 
 def InitScreen():
-    fontNormal = font.Font(window, size=15, weight='bold')
+    fontNormal = font.Font(window, size=15, weight='bold', family='나눔바른고딕')
 
     # 시(군) 선택 부분
     global CityListBox
@@ -47,34 +48,39 @@ def InitScreen():
 
     # 분류 제목 부분
     global CityLabel, TypeLabel, DeptLabel
-    CityLabel = Label(window, text="시(군) 선택", font=fontNormal)
-    TypeLabel = Label(window, text="병원 종류", font=fontNormal)
-    DeptLabel = Label(window, text="진료 과목", font=fontNormal)
+    CityLabel = Label(window, text="시(군) 선택", font=fontNormal, bg="#bebebe")
+    TypeLabel = Label(window, text="병원 종류", font=fontNormal, bg="#bebebe")
+    DeptLabel = Label(window, text="진료 과목", font=fontNormal, bg="#bebebe")
 
     CityLabel.place(x=10, y=10, width=100, height=70)
     TypeLabel.place(x=10, y=90, width=100, height=70)
     DeptLabel.place(x=10, y=170, width=100, height=70)
 
-
     # 로고 부분
     global LogoLabel
-    LogoLable = Label(window, image=logoImage)
+    LogoLable = Label(window, image=logoImage, bg="white")
     LogoLable.place(x=410, y=10, width=380, height=70)
+
+    # 검색 부분
+    global SearchButton
+    SearchButton = Button(window, image=searchImage)
+    SearchButton.place(x=410, y=90, width=120, height=120)
 
     # 메일 부분
     global MailButton
     MailButton = Button(window, image=emailImage)
-    MailButton.place(x=430, y=90, width=150, height=150)
+    MailButton.place(x=540, y=90, width=120, height=120)
 
     # 지도 부분
     global MapButton
     MapButton = Button(window, image=mapImage)
-    MapButton.place(x=620, y=90, width=150, height=150)   
+    MapButton.place(x=670, y=90, width=120, height=120)   
 
     # 정보 부분
     global InfoLabel
-    InfoLabel = Label(text = "정보", font=fontNormal, bg="cyan")
-    InfoLabel.place(x = 410, y= 250, width=380, height=340)
+    TempText = "해당병원 정보출력\nex) 위치, 입원, 실수, 전화번호"
+    InfoLabel = Label(text = TempText, font=fontNormal, bg="#bebebe")
+    InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
 InitScreen()
 window.mainloop()
