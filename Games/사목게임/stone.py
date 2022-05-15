@@ -11,31 +11,71 @@ class Cell(Canvas):
         self.col = col
         self.isEmpty = True
 
-        self.create_oval(4, 4, 20, 20, fill = "white", tags="oval")
+        self.create_oval(7, 7, 20, 20, fill = "white", tags="oval")
         self.bind("<Button-1>", self.clicked)
+    
+    def getEmpty(self):
+        return self.isEmpty
 
     def clicked(self, event): # red 또는 yellow 돌 놓기.
-        if self.isEmpty:
-            nextcolor = "red" if self.color != "red" else "yellow"
-            self.setColor(nextcolor)
-            self.isEmpty = False
+        global turn, cells, done, process_button
+        if not done:
+            if self.isEmpty and (self.row == 5 or not cells[self.row + 1][self.col].getEmpty()):
+                nextcolor = turn
+                self.setColor(nextcolor)
+                self.isEmpty = False
+                
+                if turn == "red":
+                    turn = "yellow"
+                elif turn == "yellow":
+                    turn = "red"    
+            print(turn)
+
+            if self.check():
+                if turn == "red":
+                    process_button["text"] = yellow_text
+                else: 
+                    process_button["text"] = red_text
+                done = True
 
     def setColor(self, color):
         self.delete("oval") 
         self.color = color
-        self.create_oval(4, 4, 20, 20, fill = self.color, tags="oval")
+        self.create_oval(7, 7, 20, 20, fill = self.color, tags="oval")
 
-    def __checkVertical(self):  # 열 방향 확인
-        pass
+    def check(self):
+        global cells
+        for i in range(6):
+            for j in range(4):
+                if cells[i][j].color != 'white' and\
+                    cells[i][j].color == cells[i][j+1].color and\
+                    cells[i][j].color == cells[i][j+2].color and\
+                    cells[i][j].color == cells[i][j+3].color:
+                    return True
 
-    def __Horizontal(self):     # 행 방향 확인
-        pass
+        for i in range(3):
+            for j in range(7):
+                if cells[i][j].color != 'white' and\
+                    cells[i][j].color == cells[i+1][j].color and\
+                    cells[i][j].color == cells[i+2][j].color and\
+                    cells[i][j].color == cells[i+3][j].color:
+                    return True
 
-    def __checkDiag1(self):     # /방향 대각선 확인
-        pass
+        for i in range(3):
+            for j in range(4):
+                if cells[i][j].color != 'white' and\
+                    cells[i][j].color == cells[i+1][j+1].color and\
+                    cells[i][j].color == cells[i+2][j+2].color and\
+                    cells[i][j].color == cells[i+3][j+3].color:
+                    return True
 
-    def __checkDiag2(self):     # \방향 대각선 확인
-        pass
+        for i in range(3):
+            for j in range(3, 7):
+                if cells[i][j].color != 'white' and\
+                    cells[i][j].color == cells[i+1][j-1].color and\
+                    cells[i][j].color == cells[i+2][j-2].color and\
+                    cells[i][j].color == cells[i+3][j-3].color:
+                    return True
 
 def restart():
     print("새로 시작")
@@ -46,6 +86,7 @@ _MAXCOL = 7
 
 turn = "red"    # 다음 놓을 차례 (red, yellow, none(game over))
 cells = []
+done = False    # flag for game over
 
 # loop
 window = Tk() # Create a window
@@ -63,7 +104,12 @@ for i in range(6):
         cells[i].append(Cell(frame1, i, j, width = 20, height = 20))
         cells[i][j].grid(row=i, column=j)
 
+
 restart_text = "새로 시작"
-process_button = Button(window, text = restart_text, command=restart).pack()  # restart button
+red_text = "red 승리!"
+yellow_text = "yellow 승리!"
+
+process_button = Button(window, text = restart_text)
+process_button.pack()
 
 window.mainloop() # Create an event loop
