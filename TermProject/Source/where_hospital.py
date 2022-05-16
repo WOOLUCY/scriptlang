@@ -63,17 +63,18 @@ def InitScreen():
 
     # 검색 부분
     global SearchButton
-    SearchButton = Button(window, image=searchImage)
+    SearchButton = Button(window, image=searchImage, bg="white")
     SearchButton.place(x=410, y=90, width=120, height=120)
+    
 
     # 메일 부분
     global MailButton
-    MailButton = Button(window, image=emailImage)
+    MailButton = Button(window, image=emailImage, bg="white")
     MailButton.place(x=540, y=90, width=120, height=120)
 
     # 지도 부분
     global MapButton
-    MapButton = Button(window, image=mapImage)
+    MapButton = Button(window, image=mapImage, bg="white")
     MapButton.place(x=670, y=90, width=120, height=120)   
 
     # 정보 부분
