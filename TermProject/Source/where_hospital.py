@@ -100,13 +100,13 @@ def InitScreen():
     # InfoLabel = Label(text = TempText, font=fontInfo, bg="#bebebe", justify="left")
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
-    ST = st.ScrolledText()
+    ST = st.ScrolledText(window)
     ST.place(x = 410, y= 220, width=380, height=370)
 
 
 # todo: command 함수 추가
 def event_for_listbox(event):
-    global InfoLabel
+    global InfoLabel, ST
     selection = event.widget.curselection()
     if selection:
         index = selection[0]
@@ -125,13 +125,20 @@ def event_for_listbox(event):
         for item in elements:   # 'row' element들
             if item.find('BIZPLC_NM').text == data:
                 info = '[병원명]' + '\n' + getStr(item.find('BIZPLC_NM').text) + \
-                '\n' + '[전화번호]' + '\n' + getStr(item.find('LOCPLC_FACLT_TELNO_DTLS').text) + \
-                '\n' + '[도로명 주소]' + '\n' +getStr(item.find('REFINE_ROADNM_ADDR').text)  + \
-                '\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)      
-
+                '\n\n' + '[의료기관종별명]' + '\n' + getStr(item.find('MEDINST_ASORTMT_NM').text) + \
+                '\n\n' + '[전화번호]' + '\n' + getStr(item.find('LOCPLC_FACLT_TELNO_DTLS').text) + \
+                '\n\n' + '[도로명 주소]' + '\n' +getStr(item.find('REFINE_ROADNM_ADDR').text)  + \
+                '\n\n' + '[지번 주소]' + '\n' +getStr(item.find('REFINE_LOTNO_ADDR').text)  + \
+                '\n\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)  + \
+                '\n\n' + '[의료인수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
+                '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
+                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text)              
         print(info)                  
 
-        ST.configure(text=info)
+        # InfoLabel.configure(text=info)
+        # ST.configure(state="disabled")
+        ST.delete('1.0', END)
+        ST.insert(INSERT, info)
 
 def onSearch():     # '검색' 버튼 이벤트 처리
     global CityListBox, clist
@@ -150,7 +157,7 @@ def onSearch():     # '검색' 버튼 이벤트 처리
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):
-    return ''if not s else s
+    return '정보없음'if not s else s
 
 def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
     from xml.etree import ElementTree
