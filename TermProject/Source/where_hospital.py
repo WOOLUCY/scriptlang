@@ -1,6 +1,8 @@
+from ctypes import addressof
 from msilib.schema import ListBox
 from tkinter import *
 from tkinter import font
+from list import *
 
 window = Tk()
 window.title("어디 병원")
@@ -20,36 +22,20 @@ def InitScreen():
     global CityListBox, clist
     CityScrollbar = Scrollbar(window)
     CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
-    clist = ["안양시", "시흥시", "성남시", "광명시","가평군",\
-            "고양시","과천시","광주시","구리시","군포시","김포시",\
-            "남양주시","동두천시","부천시","수원시","안산시",\
-            "안성시","양주시","양평군","여주시","연천군","오산시",\
-            "용인시","의왕시","의정부시","이천시","파주시","평택시",\
-            "포천시","하남시","화성시",]        # todo: add list  
-    for i, s in enumerate(clist): 
-        CityListBox.insert(i, s)
+    clist = city_list
+    for i, c in enumerate(clist): 
+        CityListBox.insert(i, c)
     CityListBox.place(x=110, y=10, width=280, height=70)
 
     CityScrollbar.config(command=CityListBox.yview) 
     CityScrollbar.place(x=390, y=10, width=20, height=70)
 
     # 진료 과목 내용 정보
-    global DeptListBox
+    global DeptListBox, dlist
     DeptScrollbar = Scrollbar(window)
     DeptListBox = Listbox(window, activestyle='none', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
-    slist = ["치과", "내과", "피부과", "정형외과",
-    "가정의학과","구강내과","구강악안면외과","내과","마취통증의학과","방사선종양학과",
-    "비뇨의학과","사상체질과","산부인과","성형외과","소아청소년과","소아치과","신경과","신경외과","안과",
-    "영상의학과","외과","응급의학과","이비인후과","재활의학과","정신건강의학과","정형외과","직업환경의학과",
-    "진단검사의학과","치과","치과교정과","치과보존과","치과보철과","침구과","피부과","한방내과","한방부인과",
-    "한방소아과","한방신경정신과","한방안·이비인후·피부과","한방응급과","한방재활의학과","흉부외과","내과","마취통증의학과","병리과",
-    "비뇨의학과","신경과","신경외과","영상의학과", "외과", "이비인후과", "재활의학과", "정신건강의학과", "정형외과", "진단검사의학과",
-    "치과보철과","침구과", "피부과", "한방내과","한방소아과", "치주과", "치과교정과", "가정의학과", "산부인과"
-    "성형외과","소아청소년과","구강악안면외과","한방안·이비인후·피부과""한방재활의학과","응급의학과", "직업환경의학과", 
-    "흉부외과", "치과", "사상체질과", "한방신경정신과", "한방부인과", "치과보존과", "소아치과", "안과","방사선종양학과",
-    "구강악안면방사선과","한방응급과", "구강내과", "예방치과","예방의학과", "통합치의학과", "영상치의학과", "구강병리과", "결핵과","핵의학과"
-    ]          # todo: add list
-    for i, s in enumerate(slist): 
+    dlist = dept_list
+    for i, s in enumerate(dlist): 
         DeptListBox.insert(i, s)
     DeptListBox.place(x=110, y=90, width=280, height=70) 
 
@@ -97,7 +83,7 @@ def InitScreen():
     
     # 메일 부분
     global MailButton
-    MailButton = Button(window, image=emailImage, bg="white")
+    MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup)
     MailButton.place(x=540, y=90, width=120, height=120)
 
     # 지도 부분
@@ -111,7 +97,7 @@ def InitScreen():
     InfoLabel = Label(text = TempText, font=fontNormal, bg="#bebebe")
     InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
-# todo command 함수 추가
+# todo: command 함수 추가
 def event_for_listbox(event):
     global InfoLabel
     selection = event.widget.curselection()
@@ -123,23 +109,23 @@ def event_for_listbox(event):
 
 def onSearch():     # '검색' 버튼 이벤트 처리
     global CityListBox, clist
+    global DeptListBox, dlist
 
-    sels = CityListBox.curselection()
-    iSearchIndex = 0 if len(sels) == 0 else CityListBox.curselection()[0]
-    if iSearchIndex == 0:
-        SearchHospital(clist[0])
-    elif iSearchIndex == 1:
-        SearchHospital(clist[1])
-    elif iSearchIndex == 2:
-        SearchHospital(clist[2])
-    elif iSearchIndex == 3:
-        SearchHospital(clist[3])
+    selC = CityListBox.curselection()
+    cSearchIndex = 0 if len(selC) == 0 else CityListBox.curselection()[0]
+    
+    selD = DeptListBox.curselection()
+    dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
+
+    SearchHospital(clist[cSearchIndex], dlist[dSearchIndex])
+    
+
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):
     return ''if not s else s
 
-def SearchHospital(city = ''):    # '검색' 버튼 -> '병원'
+def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
     from xml.etree import ElementTree
 
     global listBox
@@ -157,7 +143,7 @@ def SearchHospital(city = ''):    # '검색' 버튼 -> '병원'
         
         if InputLabel.get() not in part_el.text:
             continue
-        
+
         if item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
             _text = '[' + str(i) + ']' + \
             getStr(item.find('BIZPLC_NM').text) + \
@@ -165,6 +151,38 @@ def SearchHospital(city = ''):    # '검색' 버튼 -> '병원'
             
             listBox.insert(i-1, _text)
             i = i + 1
+        
+        elif item.find('BSN_STATE_NM').text != "폐업" and city == "선택안함":
+            _text = '[' + str(i) + ']' + \
+            getStr(item.find('BIZPLC_NM').text) + \
+            ' : ' + getStr(item.find('SIGUN_NM').text)   
+            
+            listBox.insert(i-1, _text)
+            i = i + 1
+
+# mail
+popup = inputEmail = btnEmail = None
+addrEmail = None
+
+def onEmailInput():
+    global addrEmail
+    addrEmail = inputEmail.get()
+    print(addrEmail)
+    popup.destroy() # popup 내리기
+
+def onEmailPopup(): 
+    global window, addrEmail, popup
+    addrEmail = None 
+    popup = Toplevel(window) # popup 띄우기
+    popup.geometry("300x150")
+    popup.title("받을 이메일 주소 입력")
+
+    global inputEmail, btnEmail
+    inputEmail = Entry(popup, width = 200,)
+    inputEmail.pack(fill='x', padx=10, expand=True)
+
+    btnEmail = Button(popup, text="확인", command=onEmailInput)
+    btnEmail.pack(anchor="s", padx=10, pady=10)
 
 InitScreen()
 window.mainloop()
