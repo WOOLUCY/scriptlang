@@ -22,6 +22,14 @@ def InitScreen():
     CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
     clist = ["안양시", "시흥시", "성남시", "광명시"]        # todo: add list
     for i, s in enumerate(clist): 
+    slist = ["안양시", "시흥시", "성남시", "광명시","가평군",
+    "고양시","과천시","광주시","구리시","군포시","김포시",
+    "남양주시","동두천시","부천시","수원시","안산시",
+    "안성시","양주시","양평군","여주시","연천군","오산시",
+    "용인시","의왕시","의정부시","이천시","파주시","평택시",
+    "포천시","하남시","화성시",]        # todo: add list
+    
+    for i, s in enumerate(slist): 
         CityListBox.insert(i, s)
     CityListBox.place(x=110, y=10, width=280, height=70)
 
@@ -32,7 +40,19 @@ def InitScreen():
     global DeptListBox
     DeptScrollbar = Scrollbar(window)
     DeptListBox = Listbox(window, activestyle='none', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
-    slist = ["치과", "내과", "피부과", "정형외과"]          # todo: add list
+    slist = [
+    "치과", "내과", "피부과", "정형외과",
+    "가정의학과","구강내과","구강악안면외과","내과","마취통증의학과","방사선종양학과",
+    "비뇨의학과","사상체질과","산부인과","성형외과","소아청소년과","소아치과","신경과","신경외과","안과",
+    "영상의학과","외과","응급의학과","이비인후과","재활의학과","정신건강의학과","정형외과","직업환경의학과",
+    "진단검사의학과","치과","치과교정과","치과보존과","치과보철과","침구과","피부과","한방내과","한방부인과",
+    "한방소아과","한방신경정신과","한방안·이비인후·피부과","한방응급과","한방재활의학과","흉부외과","내과","마취통증의학과","병리과",
+    "비뇨의학과","신경과","신경외과","영상의학과", "외과", "이비인후과", "재활의학과", "정신건강의학과", "정형외과", "진단검사의학과",
+    "치과보철과","침구과", "피부과", "한방내과","한방소아과", "치주과", "치과교정과", "가정의학과", "산부인과"
+    "성형외과","소아청소년과","구강악안면외과","한방안·이비인후·피부과""한방재활의학과","응급의학과", "직업환경의학과", 
+    "흉부외과", "치과", "사상체질과", "한방신경정신과", "한방부인과", "치과보존과", "소아치과", "안과","방사선종양학과",
+    "구강악안면방사선과","한방응급과", "구강내과", "예방치과","예방의학과", "통합치의학과", "영상치의학과", "구강병리과", "결핵과","핵의학과"
+    ]          # todo: add list
     for i, s in enumerate(slist): 
         DeptListBox.insert(i, s)
     DeptListBox.place(x=110, y=90, width=280, height=70) 
@@ -62,7 +82,7 @@ def InitScreen():
     # 분류 제목 부분
     global CityLabel, TypeLabel, DeptLabel
     CityLabel = Label(window, text="시(군) 선택", font=fontNormal, bg="#bebebe")
-    DeptLabel = Label(window, text="진료 과목", font=fontNormal, bg="#bebebe")
+    DeptLabel = Label(window, text="진료 과"목", font=fontNormal, bg="#bebebe")
     SearchLabel = Label(window, text="검색명", font=fontNormal, bg="#bebebe")
 
     CityLabel.place(x=10, y=10, width=100, height=70)
