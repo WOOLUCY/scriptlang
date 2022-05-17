@@ -15,11 +15,11 @@ window.configure(bg='white')
 searchImage = PhotoImage(file='image/search.png')  # search image
 emailImage = PhotoImage(file='image/mail.png')     # gmail image
 mapImage = PhotoImage(file='image/map.png')        # naver map image
-logoImage = PhotoImage(file='image/logo.png')      # logo image
+logoImage = PhotoImage(file='image/logo.gif')      # logo image
 
 def InitScreen():
-    fontNormal = font.Font(window, size=15, weight='bold', family='나눔바른고딕')
-    fontInfo = font.Font(window, size=9, weight='bold', family='나눔바른고딕')
+    fontNormal = font.Font(window, size=15, weight='bold', family='굴림')
+    fontInfo = font.Font(window, size=9, weight='bold', family='굴림')
 
     # 시(군) 선택 부분
     global CityListBox, clist
@@ -185,42 +185,11 @@ def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
             listBox.insert(i-1, _text)
             i = i + 1
         
-        # elif item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
-        #     _text = '[' + str(i) + ']' + \
-        #     getStr(item.find('BIZPLC_NM').text) + \
-        #     ' : ' + getStr(item.find('SIGUN_NM').text)   
-            
-        #     listBox.insert(i-1, _text)
-        #     i = i + 1
-
         elif item.find('BSN_STATE_NM').text != "폐업" and city == "선택안함":
             _text = getStr(item.find('BIZPLC_NM').text)
             
             listBox.insert(i-1, _text)
             i = i + 1
-# mail
-# popup = inputEmail = btnEmail = None
-# addrEmail = None
-
-# def onEmailInput():
-#     global addrEmail
-#     addrEmail = inputEmail.get()
-#     print(addrEmail)
-#     popup.destroy() # popup 내리기
-
-# def onEmailPopup(): 
-#     global window, addrEmail, popup
-#     addrEmail = None 
-#     popup = Toplevel(window) # popup 띄우기
-#     popup.geometry("300x150")
-#     popup.title("받을 이메일 주소 입력")
-
-#     global inputEmail, btnEmail
-#     inputEmail = Entry(popup, width = 200,)
-#     inputEmail.pack(fill='x', padx=10, expand=True)
-
-#     btnEmail = Button(popup, text="확인", command=onEmailInput)
-#     btnEmail.pack(anchor="s", padx=10, pady=10)
 
 InitScreen()
 window.mainloop()
