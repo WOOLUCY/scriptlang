@@ -5,12 +5,6 @@ from tkinter import font
 g_Tk = Tk()
 g_Tk.geometry("800x600+450+100")
 
-def event_for_list_box(event):
-    selection = event.widget.curselectioin()
-    if selection:
-        index = selection[0]
-        data = event.widget.get(index)
-        print(data)
 
 def InitScreen():
     fontTitle = font.Font(g_Tk, size=18, weight='bold', family='나눔바른고딕')
