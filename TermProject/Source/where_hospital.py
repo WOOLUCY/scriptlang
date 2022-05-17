@@ -25,6 +25,7 @@ def InitScreen():
     clist = city_list
     for i, c in enumerate(clist): 
         CityListBox.insert(i, c)
+
     CityListBox.place(x=110, y=10, width=280, height=70)
 
     CityScrollbar.config(command=CityListBox.yview) 
