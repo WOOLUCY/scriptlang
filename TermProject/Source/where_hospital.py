@@ -17,11 +17,11 @@ def InitScreen():
     fontNormal = font.Font(window, size=15, weight='bold', family='나눔바른고딕')
 
     # 시(군) 선택 부분
-    global CityListBox
+    global CityListBox, clist
     CityScrollbar = Scrollbar(window)
     CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
-    slist = ["안양시", "시흥시", "성남시", "광명시"]        # todo: add list
-    for i, s in enumerate(slist): 
+    clist = ["안양시", "시흥시", "성남시", "광명시"]        # todo: add list
+    for i, s in enumerate(clist): 
         CityListBox.insert(i, s)
     CityListBox.place(x=110, y=10, width=280, height=70)
 
@@ -106,18 +106,18 @@ def event_for_listbox(event):
         InfoLabel.configure(text=data)
 
 def onSearch():     # '검색' 버튼 이벤트 처리
-    global CityListBox
+    global CityListBox, clist
 
     sels = CityListBox.curselection()
     iSearchIndex = 0 if len(sels) == 0 else CityListBox.curselection()[0]
     if iSearchIndex == 0:
-        SearchHospital()
+        SearchHospital(clist[0])
     elif iSearchIndex == 1:
-        pass
+        SearchHospital(clist[1])
     elif iSearchIndex == 2:
-        pass
+        SearchHospital(clist[2])
     elif iSearchIndex == 3:
-        pass
+        SearchHospital(clist[3])
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):
@@ -137,12 +137,12 @@ def SearchHospital(city = ''):    # '검색' 버튼 -> '병원'
 
     i = 1
     for item in elements:   # 'row' element들
-        part_el = item.find('SIGUN_NM')
+        part_el = item.find('BIZPLC_NM')
         
         if InputLabel.get() not in part_el.text:
             continue
         
-        if item.find('BSN_STATE_NM').text != "폐업":
+        if item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
             _text = '[' + str(i) + ']' + \
             getStr(item.find('BIZPLC_NM').text) + \
             ' : ' + getStr(item.find('SIGUN_NM').text)   
