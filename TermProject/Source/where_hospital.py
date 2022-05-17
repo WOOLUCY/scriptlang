@@ -80,7 +80,7 @@ def InitScreen():
     # 분류 제목 부분
     global CityLabel, TypeLabel, DeptLabel
     CityLabel = Label(window, text="시(군) 선택", font=fontNormal, bg="#bebebe")
-    DeptLabel = Label(window, text="진료 과"목", font=fontNormal, bg="#bebebe")
+    DeptLabel = Label(window, text="진료 과목", font=fontNormal, bg="#bebebe")
     SearchLabel = Label(window, text="검색명", font=fontNormal, bg="#bebebe")
 
     CityLabel.place(x=10, y=10, width=100, height=70)
