@@ -2,7 +2,6 @@ from audioop import add
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText # MIMEtexe 생성에 사용
 from http.client import HTTPSConnection
-from where_hospital import *
 from tkinter import *
 
 popup = inputEmail = btnEmail = None
@@ -11,12 +10,15 @@ addrEmail = None
 def onEmailInput():
     global addrEmail
     addrEmail = inputEmail.get()
+    msg = MIMEText('본문: !너의 지메일은 해킹당하지 않았다!') 
+    msg['Subject'] = '제목: !너의 지메일은 해킹당하지 않았다!' 
+    sendMail('kikanaidek@gmail.com', addrEmail, msg)
     popup.destroy() # popup 내리기
 
 def onEmailPopup(): 
-    global window, addrEmail, popup
+    global addrEmail, popup
     addrEmail = None 
-    popup = Toplevel(window) # popup 띄우기
+    popup = Toplevel() # popup 띄우기
     popup.geometry("300x150")
     popup.title("받을 이메일 주소 입력")
 
@@ -38,4 +40,5 @@ def sendMail(fromAddr, toAddr, msg):
     s.login('kikanaidek@gmail.com', 'mktjlisojzwucwro') 
     s.sendmail(fromAddr , [toAddr], msg.as_string()) 
     s.close()
+
 

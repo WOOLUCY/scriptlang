@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import font
 from list import *
 import tkinter.scrolledtext as st
+from gmail import *
 
 window = Tk()
 window.title("어디 병원")
@@ -157,7 +158,7 @@ def onSearch():     # '검색' 버튼 이벤트 처리
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):
-    return '정보없음'if not s else s
+    return '정보없음' if not s else s
 
 def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
     from xml.etree import ElementTree
@@ -198,28 +199,28 @@ def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
             listBox.insert(i-1, _text)
             i = i + 1
 # mail
-popup = inputEmail = btnEmail = None
-addrEmail = None
+# popup = inputEmail = btnEmail = None
+# addrEmail = None
 
-def onEmailInput():
-    global addrEmail
-    addrEmail = inputEmail.get()
-    print(addrEmail)
-    popup.destroy() # popup 내리기
+# def onEmailInput():
+#     global addrEmail
+#     addrEmail = inputEmail.get()
+#     print(addrEmail)
+#     popup.destroy() # popup 내리기
 
-def onEmailPopup(): 
-    global window, addrEmail, popup
-    addrEmail = None 
-    popup = Toplevel(window) # popup 띄우기
-    popup.geometry("300x150")
-    popup.title("받을 이메일 주소 입력")
+# def onEmailPopup(): 
+#     global window, addrEmail, popup
+#     addrEmail = None 
+#     popup = Toplevel(window) # popup 띄우기
+#     popup.geometry("300x150")
+#     popup.title("받을 이메일 주소 입력")
 
-    global inputEmail, btnEmail
-    inputEmail = Entry(popup, width = 200,)
-    inputEmail.pack(fill='x', padx=10, expand=True)
+#     global inputEmail, btnEmail
+#     inputEmail = Entry(popup, width = 200,)
+#     inputEmail.pack(fill='x', padx=10, expand=True)
 
-    btnEmail = Button(popup, text="확인", command=onEmailInput)
-    btnEmail.pack(anchor="s", padx=10, pady=10)
+#     btnEmail = Button(popup, text="확인", command=onEmailInput)
+#     btnEmail.pack(anchor="s", padx=10, pady=10)
 
 InitScreen()
 window.mainloop()
