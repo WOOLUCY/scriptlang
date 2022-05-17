@@ -3,6 +3,7 @@ from msilib.schema import ListBox
 from tkinter import *
 from tkinter import font
 from list import *
+import tkinter.scrolledtext as st
 
 window = Tk()
 window.title("어디 병원")
@@ -17,6 +18,7 @@ logoImage = PhotoImage(file='image/logo.png')      # logo image
 
 def InitScreen():
     fontNormal = font.Font(window, size=15, weight='bold', family='나눔바른고딕')
+    fontInfo = font.Font(window, size=9, weight='bold', family='나눔바른고딕')
 
     # 시(군) 선택 부분
     global CityListBox, clist
@@ -93,10 +95,14 @@ def InitScreen():
     MapButton.place(x=670, y=90, width=120, height=120)   
 
     # 정보 부분
-    global InfoLabel
+    global InfoLabel, ST
     TempText = "해당병원 정보출력\nex) 위치, 입원, 실수, 전화번호"
-    InfoLabel = Label(text = TempText, font=fontNormal, bg="#bebebe")
-    InfoLabel.place(x = 410, y= 220, width=380, height=370)
+    # InfoLabel = Label(text = TempText, font=fontInfo, bg="#bebebe", justify="left")
+    # InfoLabel.place(x = 410, y= 220, width=380, height=370)
+
+    ST = st.ScrolledText()
+    ST.place(x = 410, y= 220, width=380, height=370)
+
 
 # todo: command 함수 추가
 def event_for_listbox(event):
@@ -105,8 +111,27 @@ def event_for_listbox(event):
     if selection:
         index = selection[0]
         data = event.widget.get(index)
-        print(data)
-        InfoLabel.configure(text=data)
+        # print(data)
+
+        # 클릭 시, 정보 출력
+        from xml.etree import ElementTree
+        with open('경기도병원현황.xml', 'rb') as f:
+            strXml = f.read().decode('utf-8')
+        parseData = ElementTree.fromstring(strXml)
+
+        elements = parseData.iter('row')
+
+        info = "null"
+        for item in elements:   # 'row' element들
+            if item.find('BIZPLC_NM').text == data:
+                info = '[병원명]' + '\n' + getStr(item.find('BIZPLC_NM').text) + \
+                '\n' + '[전화번호]' + '\n' + getStr(item.find('LOCPLC_FACLT_TELNO_DTLS').text) + \
+                '\n' + '[도로명 주소]' + '\n' +getStr(item.find('REFINE_ROADNM_ADDR').text)  + \
+                '\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)      
+
+        print(info)                  
+
+        ST.configure(text=info)
 
 def onSearch():     # '검색' 버튼 이벤트 처리
     global CityListBox, clist
@@ -119,6 +144,7 @@ def onSearch():     # '검색' 버튼 이벤트 처리
     dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
 
     SearchHospital(clist[cSearchIndex], dlist[dSearchIndex])
+    print(cSearchIndex, dSearchIndex)
     
 
 
@@ -146,21 +172,24 @@ def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
             continue
 
         if item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
-            _text = '[' + str(i) + ']' + \
-            getStr(item.find('BIZPLC_NM').text) + \
-            ' : ' + getStr(item.find('SIGUN_NM').text)   
+            _text = getStr(item.find('BIZPLC_NM').text)
             
             listBox.insert(i-1, _text)
             i = i + 1
         
+        # elif item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
+        #     _text = '[' + str(i) + ']' + \
+        #     getStr(item.find('BIZPLC_NM').text) + \
+        #     ' : ' + getStr(item.find('SIGUN_NM').text)   
+            
+        #     listBox.insert(i-1, _text)
+        #     i = i + 1
+
         elif item.find('BSN_STATE_NM').text != "폐업" and city == "선택안함":
-            _text = '[' + str(i) + ']' + \
-            getStr(item.find('BIZPLC_NM').text) + \
-            ' : ' + getStr(item.find('SIGUN_NM').text)   
+            _text = getStr(item.find('BIZPLC_NM').text)
             
             listBox.insert(i-1, _text)
             i = i + 1
-
 # mail
 popup = inputEmail = btnEmail = None
 addrEmail = None
