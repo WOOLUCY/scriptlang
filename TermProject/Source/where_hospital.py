@@ -25,7 +25,7 @@ def InitScreen():
             "남양주시","동두천시","부천시","수원시","안산시",\
             "안성시","양주시","양평군","여주시","연천군","오산시",\
             "용인시","의왕시","의정부시","이천시","파주시","평택시",\
-            "포천시","하남시","화성시",]        # todo: add list  
+            "포천시","하남시","화성시"]        # todo: add list  
     for i, s in enumerate(clist): 
         CityListBox.insert(i, s)
     CityListBox.place(x=110, y=10, width=280, height=70)
