@@ -17,17 +17,16 @@ def InitScreen():
     fontNormal = font.Font(window, size=15, weight='bold', family='나눔바른고딕')
 
     # 시(군) 선택 부분
-    global CityListBox
+    global CityListBox, clist
     CityScrollbar = Scrollbar(window)
     CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
-    slist = ["안양시", "시흥시", "성남시", "광명시","가평군",
-    "고양시","과천시","광주시","구리시","군포시","김포시",
-    "남양주시","동두천시","부천시","수원시","안산시",
-    "안성시","양주시","양평군","여주시","연천군","오산시",
-    "용인시","의왕시","의정부시","이천시","파주시","평택시",
-    "포천시","하남시","화성시",]        # todo: add list
-    
-    for i, s in enumerate(slist): 
+    clist = ["안양시", "시흥시", "성남시", "광명시","가평군",\
+            "고양시","과천시","광주시","구리시","군포시","김포시",\
+            "남양주시","동두천시","부천시","수원시","안산시",\
+            "안성시","양주시","양평군","여주시","연천군","오산시",\
+            "용인시","의왕시","의정부시","이천시","파주시","평택시",\
+            "포천시","하남시","화성시",]        # todo: add list  
+    for i, s in enumerate(clist): 
         CityListBox.insert(i, s)
     CityListBox.place(x=110, y=10, width=280, height=70)
 
@@ -38,8 +37,7 @@ def InitScreen():
     global DeptListBox
     DeptScrollbar = Scrollbar(window)
     DeptListBox = Listbox(window, activestyle='none', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
-    slist = [
-    "치과", "내과", "피부과", "정형외과",
+    slist = ["치과", "내과", "피부과", "정형외과",
     "가정의학과","구강내과","구강악안면외과","내과","마취통증의학과","방사선종양학과",
     "비뇨의학과","사상체질과","산부인과","성형외과","소아청소년과","소아치과","신경과","신경외과","안과",
     "영상의학과","외과","응급의학과","이비인후과","재활의학과","정신건강의학과","정형외과","직업환경의학과",
@@ -124,18 +122,18 @@ def event_for_listbox(event):
         InfoLabel.configure(text=data)
 
 def onSearch():     # '검색' 버튼 이벤트 처리
-    global CityListBox
+    global CityListBox, clist
 
     sels = CityListBox.curselection()
     iSearchIndex = 0 if len(sels) == 0 else CityListBox.curselection()[0]
     if iSearchIndex == 0:
-        SearchHospital()
+        SearchHospital(clist[0])
     elif iSearchIndex == 1:
-        pass
+        SearchHospital(clist[1])
     elif iSearchIndex == 2:
-        pass
+        SearchHospital(clist[2])
     elif iSearchIndex == 3:
-        pass
+        SearchHospital(clist[3])
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):
@@ -155,12 +153,12 @@ def SearchHospital(city = ''):    # '검색' 버튼 -> '병원'
 
     i = 1
     for item in elements:   # 'row' element들
-        part_el = item.find('SIGUN_NM')
+        part_el = item.find('BIZPLC_NM')
         
         if InputLabel.get() not in part_el.text:
             continue
         
-        if item.find('BSN_STATE_NM').text != "폐업":
+        if item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
             _text = '[' + str(i) + ']' + \
             getStr(item.find('BIZPLC_NM').text) + \
             ' : ' + getStr(item.find('SIGUN_NM').text)   
