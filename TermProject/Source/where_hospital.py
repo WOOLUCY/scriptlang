@@ -5,9 +5,13 @@ from tkinter import font
 from list import *
 import tkinter.scrolledtext as st
 from gmail import *
+import server
+
+# todo: 진료과목 분류 기능
+# todo: 중복 정보 선택 기능
 
 window = Tk()
-window.title("어디 병원")
+window.title("Where the Hospital")
 window.geometry("800x600+450+200")
 window.resizable(False, False)
 window.configure(bg='white')
@@ -25,7 +29,7 @@ def InitScreen():
     global CityListBox, clist
     CityScrollbar = Scrollbar(window)
     CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
-    clist = city_list
+    clist = server.city_list
     for i, c in enumerate(clist): 
         CityListBox.insert(i, c)
 
@@ -38,7 +42,7 @@ def InitScreen():
     global DeptListBox, dlist
     DeptScrollbar = Scrollbar(window)
     DeptListBox = Listbox(window, activestyle='none', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
-    dlist = dept_list
+    dlist = server.dept_list
     for i, s in enumerate(dlist): 
         DeptListBox.insert(i, s)
     DeptListBox.place(x=110, y=90, width=280, height=70) 
@@ -134,10 +138,9 @@ def event_for_listbox(event):
                 '\n\n' + '[의료인수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
                 '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text)              
-        print(info)                  
+        server.info_text = info
 
         # InfoLabel.configure(text=info)
-        # ST.configure(state="disabled")
         ST.delete('1.0', END)
         ST.insert(INSERT, info)
 
@@ -152,7 +155,7 @@ def onSearch():     # '검색' 버튼 이벤트 처리
     dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
 
     SearchHospital(clist[cSearchIndex], dlist[dSearchIndex])
-    print(cSearchIndex, dSearchIndex)
+    # print(cSearchIndex, dSearchIndex)
     
 
 
