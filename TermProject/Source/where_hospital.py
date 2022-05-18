@@ -2,9 +2,8 @@ from ctypes import addressof
 from msilib.schema import ListBox
 from tkinter import *
 from tkinter import font
-from list import *
 import tkinter.scrolledtext as st
-from gmail import *
+from mail_send import *
 import server
 
 # todo: 진료과목 분류 기능
@@ -137,13 +136,16 @@ def event_for_listbox(event):
                 '\n\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)  + \
                 '\n\n' + '[의료인수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
-                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text)   
+                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
+                '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + getStr(item.find('BIZPLC_NM').text)    
                 server.hospital_name = getStr(item.find('BIZPLC_NM').text)    
         server.info_text = info
 
         # InfoLabel.configure(text=info)
+        ST.configure(state="normal")    # 수정 가능으로 풀어놨다가,
         ST.delete('1.0', END)
         ST.insert(INSERT, info)
+        ST.configure(state="disabled")  # 수정 불가능(읽기 전용)으로 변경
 
 def onSearch():     # '검색' 버튼 이벤트 처리
     global CityListBox, clist
