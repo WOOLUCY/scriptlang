@@ -137,7 +137,8 @@ def event_for_listbox(event):
                 '\n\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)  + \
                 '\n\n' + '[의료인수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
-                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text)              
+                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text)   
+                server.hospital_name = getStr(item.find('BIZPLC_NM').text)    
         server.info_text = info
 
         # InfoLabel.configure(text=info)
