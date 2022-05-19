@@ -1,6 +1,7 @@
 import math
 from tkinter import *   # Import tkinter
 import random
+from tkinter import font
 
 class Hangman:
     def __init__(self):
@@ -27,6 +28,7 @@ class Hangman:
     def draw(self):
         # 한꺼번에 지울 요소들을 "hangman" tag로 묶어뒀다가 일괄 삭제.
         self.canvas.delete('hangman')
+        self.font = font.Font(family="굴림체", size=11)
 
         # 인자 : (x1,y1)=topleft, (x2,y2)=bottomright, start=오른쪽이 0도(반시계방향), extent=start부터 몇도까지인지
         #    style='pieslice'|'chord'|'arc'
@@ -36,19 +38,23 @@ class Hangman:
 
         # text rendering
         # todo: 행맨이랑 안 겹치게 텍스트 위치 조절하기
-        if self.dFlag:
-            self.canvas.create_text(200, 240, text='정답: '+self.answer, tags='hangman')
-            self.canvas.create_text(200, 255, text='계속하려면 ENTER', tags='hangman')
-
-        elif self.vFlag:
-            self.canvas.create_text(200, 240, text='맞았습니다! : ' +self.answer, tags='hangman')
-            self.canvas.create_text(200, 255, text='계속하려면 ENTER', tags='hangman')
+        if self.dFlag:      # 패배 시
+            self.canvas.create_text(200, 230, text='정답: '+self.answer, tags='hangman', font=self.font)
+            self.canvas.create_text(200, 245, text='계속하려면 ENTER', tags='hangman', font=self.font)
+ 
+        elif self.vFlag:    # 승리 시
+            self.canvas.create_text(200, 230, text=self.answer+' 맞았습니다', tags='hangman', font=self.font)
+            self.canvas.create_text(200, 245, text='계속하려면 ENTER', tags='hangman', font=self.font)
         
-        else:
-            self.canvas.create_text(200, 240, text='단어 추측: '+self.toString(self.input), tags='hangman') 
+        else:   # in progress
+            self.canvas.create_text(200, 230, text='단어 추측: '+self.toString(self.input), tags='hangman', font=self.font) 
             if self.missNum > 0:
-                self.canvas.create_text(200, 255, text='틀린 글자: '+self.toString(self.missChars), tags='hangman')
+                self.canvas.create_text(200, 245, text='틀린 글자: '+self.toString(self.missChars), tags='hangman', font=self.font)
         
+        if self.isIncluded:
+            self.canvas.create_text(200, 260, text=self.key+'는 이전에 입력되었습니다.', tags='hangman', font=self.font)
+            self.isIncluded = False
+
         # draw hangman
         # 1. Draw the hanger
         if self.missNum < 1:
@@ -127,12 +133,17 @@ class Hangman:
 
         self.dFlag = False
         self.vFlag = False
+
+        self.isIncluded = False
+        self.key = None
     
     def processKeyEvent(self, Key):
         if 'a' <= Key.char <= 'z':  # 문자 입력 처리
             if Key.char in self.input or Key.char in self.missChars: 
             # 이전에 글자를 다시 입력 
-                print("이전에 입력했던 글자를 다시 입력했습니다.")           
+                print("이전에 입력했던 글자를 다시 입력했습니다.")  
+                self.isIncluded = True
+                self.key = Key.char         
             elif Key.char not in self.answer:    
             # 틀린 글자
                 self.missNum += 1
