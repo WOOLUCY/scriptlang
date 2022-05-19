@@ -6,7 +6,7 @@ from tkinter import font
 class Hangman:
     def __init__(self):
         # Initialize words, get the words from a file
-        infile = open('Hangman.txt')
+        infile = open('hangman.txt', 'r')
         # 텍스트 파일은 https://github.com/Xethron/Hangman/blob/master/words.txt 참고
         self.words = infile.read().split()
 
