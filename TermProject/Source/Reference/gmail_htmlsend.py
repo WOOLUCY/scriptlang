@@ -13,7 +13,7 @@ def sendMail(fromAddr, toAddr, msg):
     s.close()
 
 senderAddr = "kikanaidek@gmail.com"
-recipientAddr = "chayeon1789@gmail.com" 
+recipientAddr = "kikanaidek@naver.com" 
 # HTML 전달을 위해 컨테이너 역할을 할 수 있는 "multipart/alternative" 타입사용
 msg = MIMEMultipart('alternative') 
 msg['Subject'] = "Test email in Python 3.10" 

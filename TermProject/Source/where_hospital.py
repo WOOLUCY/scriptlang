@@ -6,9 +6,6 @@ import tkinter.scrolledtext as st
 from mail_send import *
 import server
 
-# todo: 진료과목 분류 기능
-# todo: 중복 정보 선택 기능
-
 window = Tk()
 window.title("Where the Hospital")
 window.geometry("800x600+450+200")
