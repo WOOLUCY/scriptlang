@@ -47,7 +47,7 @@ def onEmailInput():
     try:
         sendMail('kikanaidek@gmail.com', addrEmail, msg)
         msgbox.showinfo("알림", "정상적으로 메일을 보냈습니다.")
-        onEmailPopup()
+        # onEmailPopup()
         # popup.destroy() # popup 내리기
     except:
         msgbox.showerror("Error", "유효하지 않은 메일주소입니다.")

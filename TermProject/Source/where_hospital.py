@@ -24,8 +24,12 @@ def InitScreen():
     # 시(군) 선택 부분
     global CityListBox, clist
     CityScrollbar = Scrollbar(window)
-    CityListBox = Listbox(window, activestyle='none',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
+    CityListBox = Listbox(window, activestyle='dotbox',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
+    global selectedCity
+    selectedCity = [0]
+    CityListBox.bind('<<ListboxSelect>>', setCity)
     clist = server.city_list
+
     for i, c in enumerate(clist): 
         CityListBox.insert(i, c)
 
@@ -37,7 +41,10 @@ def InitScreen():
     # 진료 과목 내용 정보
     global DeptListBox, dlist
     DeptScrollbar = Scrollbar(window)
-    DeptListBox = Listbox(window, activestyle='none', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
+    DeptListBox = Listbox(window, activestyle='dotbox', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
+    global selectedDept
+    selectedDept = [0]
+    DeptListBox.bind('<<ListboxSelect>>', setDept)
     dlist = server.dept_list
     for i, s in enumerate(dlist): 
         DeptListBox.insert(i, s)
@@ -80,10 +87,10 @@ def InitScreen():
     LogoLable = Label(window, image=logoImage, bg="white")
     LogoLable.place(x=410, y=10, width=380, height=70)
 
-    # 검색 부분
-    global SearchButton
-    SearchButton = Button(window, image=searchImage, bg="white")
-    SearchButton.place(x=410, y=90, width=120, height=120)
+    # 선택된 필터 레이블 부분
+    global filterLabel
+    filterLabel = Label(window, bg="white", text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+    filterLabel.place(x=410, y=90, width=120, height=120)
     
     # 메일 부분
     global MailButton
@@ -97,15 +104,31 @@ def InitScreen():
 
     # 정보 부분
     global InfoLabel, ST
-    TempText = "해당병원 정보출력\nex) 위치, 입원, 실수, 전화번호"
+    # TempText = "해당병원 정보출력\nex) 위치, 입원, 실수, 전화번호"
     # InfoLabel = Label(text = TempText, font=fontInfo, bg="#bebebe", justify="left")
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
     ST = st.ScrolledText(window)
     ST.place(x = 410, y= 220, width=380, height=370)
 
+def setCity(event):
+    global selectedCity, CityListBox, clist, filterLabel
+    sel = event.widget.curselection()
+    if sel:
+        selectedCity = sel
+        print(selectedCity[0])
+        filterLabel.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
 
-# todo: command 함수 추가
+
+def setDept(event):
+    global selectedDept, filterLabel
+    sel = event.widget.curselection()
+    if sel:
+        selectedDept = sel
+        filterLabel.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+        print(selectedDept[0])    
+
+
 def event_for_listbox(event):
     global InfoLabel, ST
     selection = event.widget.curselection()
@@ -147,14 +170,18 @@ def event_for_listbox(event):
 def onSearch():     # '검색' 버튼 이벤트 처리
     global CityListBox, clist
     global DeptListBox, dlist
+    global selectedCity, selectedDept
 
-    selC = CityListBox.curselection()
-    cSearchIndex = 0 if len(selC) == 0 else CityListBox.curselection()[0]
+    cIdx = selectedCity[0]
+    dIdx = selectedDept[0]
+
+    # selC = CityListBox.curselection()
+    # cSearchIndex = 0 if len(selC) == 0 else CityListBox.curselection()[0]
     
-    selD = DeptListBox.curselection()
-    dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
+    # selD = DeptListBox.curselection()
+    # dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
 
-    SearchHospital(clist[cSearchIndex], dlist[dSearchIndex])
+    SearchHospital(clist[cIdx], dlist[dIdx])
     # print(cSearchIndex, dSearchIndex)
     
 
