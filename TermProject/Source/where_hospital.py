@@ -244,9 +244,6 @@ def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
             
             listBox.insert(i-1, _text)
             i = i + 1
-        
-        else:
-            print("해당하는 병원이 없음")
 
 InitScreen()
 window.mainloop()
