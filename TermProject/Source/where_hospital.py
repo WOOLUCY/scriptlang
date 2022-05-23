@@ -88,9 +88,9 @@ def InitScreen():
     LogoLable.place(x=410, y=10, width=380, height=70)
 
     # 선택된 필터 레이블 부분
-    global filterLabel
-    filterLabel = Label(window, bg="white", text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
-    filterLabel.place(x=410, y=90, width=120, height=120)
+    global filterButton
+    filterButton = Button(window, bg="white", command=resetFilter, text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+    filterButton.place(x=410, y=90, width=120, height=120)
     
     # 메일 부분
     global MailButton
@@ -112,22 +112,31 @@ def InitScreen():
     ST.place(x = 410, y= 220, width=380, height=370)
 
 def setCity(event):
-    global selectedCity, CityListBox, clist, filterLabel
+    global selectedCity, CityListBox, clist, filterButton
     sel = event.widget.curselection()
     if sel:
         selectedCity = sel
-        print(selectedCity[0])
-        filterLabel.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
-
+        # print(selectedCity[0])
+        filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
 
 def setDept(event):
-    global selectedDept, filterLabel
+    global selectedDept, filterButton
     sel = event.widget.curselection()
     if sel:
         selectedDept = sel
-        filterLabel.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
-        print(selectedDept[0])    
+        filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+        # print(selectedDept[0])    
 
+def resetFilter():
+    global selectedCity, selectedDept
+    # print(selectedCity)
+    selectedCity = [0]
+    selectedDept = [0]
+    filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))   
+    # print(selectedCity)
+
+    global listBox
+    listBox.delete(0, listBox.size())
 
 def event_for_listbox(event):
     global InfoLabel, ST
@@ -208,18 +217,36 @@ def SearchHospital(city = '', dept = ''):    # '검색' 버튼 -> '병원'
         
         if InputLabel.get() not in part_el.text:
             continue
+        
+        # 시군 O, 과목 O
+        if item.find('SIGUN_NM').text == city and dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text) and item.find('BSN_STATE_NM') != "폐업":
+            _text = getStr(item.find('BIZPLC_NM').text) 
+            
+            listBox.insert(i-1, _text)
+            i = i + 1
 
-        if item.find('BSN_STATE_NM').text != "폐업" and item.find('SIGUN_NM').text == city:
+        # 시군 O, 과목 X 
+        elif item.find('SIGUN_NM').text == city and dept == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
+            _text = getStr(item.find('BIZPLC_NM').text) 
+            
+            listBox.insert(i-1, _text)
+            i = i + 1
+
+        # 시군 X, 과목 O
+        elif dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text) and city == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
+            _text = getStr(item.find('BIZPLC_NM').text) 
+            
+            listBox.insert(i-1, _text)
+            i = i + 1        
+        
+        elif city == "선택안함" and dept == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
             _text = getStr(item.find('BIZPLC_NM').text)
             
             listBox.insert(i-1, _text)
             i = i + 1
         
-        elif item.find('BSN_STATE_NM').text != "폐업" and city == "선택안함":
-            _text = getStr(item.find('BIZPLC_NM').text)
-            
-            listBox.insert(i-1, _text)
-            i = i + 1
+        else:
+            print("해당하는 병원이 없음")
 
 InitScreen()
 window.mainloop()
