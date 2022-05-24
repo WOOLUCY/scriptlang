@@ -3,8 +3,8 @@ info_text = None
 hospital_name = None
 
 
-latitude = 0.0
-longitude = 0.0
+latitude = 0.0      # 위도
+longitude = 0.0     # 경도
 
 
 city_list = ["선택안함", "가평군","고양시","과천시","광명시","광주시","구리시","군포시","김포시",\

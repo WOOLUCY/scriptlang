@@ -168,6 +168,15 @@ def event_for_listbox(event):
                 '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + getStr(item.find('BIZPLC_NM').text)    
                 server.hospital_name = getStr(item.find('BIZPLC_NM').text)
+                if item.find('REFINE_WGS84_LAT').text == None and item.find('REFINE_WGS84_LOGT').text == None:
+                    server.latitude = 0.0
+                    server.longitude = 0.0                  
+                else:
+                    server.latitude = float(item.find('REFINE_WGS84_LAT').text)
+                    server.longitude = float(item.find('REFINE_WGS84_LOGT').text)
+                
+                print(server.latitude, server.longitude)
+
         server.info_text = info
 
         # InfoLabel.configure(text=info)
