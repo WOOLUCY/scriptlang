@@ -187,20 +187,38 @@ def onMapPopup():
 
         global addressLabel
         addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
-        addressLabel.place(x=0, y=550, width=750, height=50)
+        addressLabel.place(x=0, y=550, width=750 - 100 - 20, height=50)
 
         InputButton = Button(popup, font=fontNormal, text='검색', command=onSearch)
-        InputButton.place(x=720, y=550, width=50, height=50)
+        InputButton.place(x=750 - 100 - 20, y=550, width=50, height=50)
+
+        HospitalButton = Button(popup, font=fontNormal, text='병원', command=onHospital)
+        HospitalButton.place(x=750 - 100 - 20 + 60, y=550, width=50, height=50)
+
+        DestButton = Button(popup, font=fontNormal, text='지정', command=onDest)
+        DestButton.place(x=750 - 100 - 20 + 60 + 60, y=550, width=50, height=50)        
 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
 
+        
+
 def onSearch():
-    global destAddr
+    global destAddr, marker_2
     destAddr = addressLabel.get()
     marker_2 = map_widget.set_address(destAddr, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") 
     marker_2.set_text(destAddr)
 
     path_1 = map_widget.set_path([marker_1.position, marker_2.position]) 
+
+def onHospital():
+    global marker_1
+    print(server.latitude, server.longitude)
+    map_widget.set_position(server.latitude, server.longitude)
+
+def onDest():
+    global marker_2
+    map_widget.set_position(marker_2.position[0],marker_2.position[1] )
+    print(marker_2.position[0],marker_2.position[1])
 
 
 
