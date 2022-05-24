@@ -178,11 +178,15 @@ def onMapPopup():
         map_widget = tkintermapview.TkinterMapView(popup, width=800, height=600, corner_radius=0) 
         map_widget.pack()
 
-        marker_1 = map_widget.set_position(server.latitude, server.longitude, marker=True) # 위도,경도 위치지정
         # 주소 위치지정 
-        # marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True)
-        # print(marker_1.position, marker_1.text) # get position and text 
-        marker_1.set_text(server.hospital_name) # set new text 
+        marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True) 
+        marker_1.set_text("한국공학대학교")
+
+        marker_2 = map_widget.set_position(server.latitude, server.longitude, marker=True) # 위도,경도 위치지정
+        marker_2.set_text(server.hospital_name) # set new text
+
+        path_1 = map_widget.set_path([marker_1.position, marker_2.position]) 
+
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
 
 if __name__ == '__main__':

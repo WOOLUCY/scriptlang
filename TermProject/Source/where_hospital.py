@@ -38,10 +38,10 @@ def InitScreen():
     for i, c in enumerate(clist): 
         CityListBox.insert(i, c)
 
-    CityListBox.place(x=110, y=10, width=280, height=70)
+    CityListBox.place(x=110, y=10, width=280 - 10, height=70)
 
     CityScrollbar.config(command=CityListBox.yview) 
-    CityScrollbar.place(x=390, y=10, width=20, height=70)
+    CityScrollbar.place(x=390 - 10, y=10, width=20, height=70)
 
     # 진료 과목 내용 정보
     global DeptListBox, dlist
@@ -53,18 +53,18 @@ def InitScreen():
     dlist = server.dept_list
     for i, s in enumerate(dlist): 
         DeptListBox.insert(i, s)
-    DeptListBox.place(x=110, y=90, width=280, height=70) 
+    DeptListBox.place(x=110, y=90, width=280 - 10, height=70) 
 
     DeptScrollbar.config(command=DeptListBox.yview) 
-    DeptScrollbar.place(x=390, y=90, width=20, height=70)
+    DeptScrollbar.place(x=390 - 10, y=90, width=20, height=70)
 
     # 사용자 입력부분
     global InputLabel
-    InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=12, relief='groove')
+    InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=3, relief='ridge')
     InputLabel.place(x=110, y=170, width=230, height=70)
 
     InputButton = Button(window, font=fontNormal, text='검색', command=onSearch)
-    InputButton.place(x=110 + 230, y=170, width=50, height=70)
+    InputButton.place(x=110 + 230, y=170, width=60, height=70)
 
     # 목록 부분
     global listBox
@@ -72,9 +72,9 @@ def InitScreen():
     listBox = Listbox(window, selectmode='extended', font=fontNormal, width=10, height=15, \
         borderwidth=12, relief='ridge', yscrollcommand=ListScrollBar.set)
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
-    listBox.place(x = 10, y = 250, width=380, height=340)
+    listBox.place(x = 10, y = 250, width=380 - 10, height=340)
 
-    ListScrollBar.place(x = 390, y = 250, width=20, height=340)
+    ListScrollBar.place(x = 390 - 10, y = 250, width=20, height=340)
     ListScrollBar.config(command=listBox.yview)
 
     # 분류 제목 부분
