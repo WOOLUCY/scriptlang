@@ -1,5 +1,6 @@
-from ctypes import addressof
-from msilib.schema import ListBox
+# from ctypes import addressof
+# from msilib.schema import ListBox
+import webbrowser
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
@@ -12,14 +13,18 @@ window.geometry("800x600+450+200")
 window.resizable(False, False)
 window.configure(bg='white')
 
-searchImage = PhotoImage(file='image/search.png')  # search image
-emailImage = PhotoImage(file='image/mail.png')     # gmail image
-mapImage = PhotoImage(file='image/map.png')        # naver map image
-logoImage = PhotoImage(file='image/logo.gif')      # logo image
+# searchImage = PhotoImage(file='image/search.png')       # search image
+filterImage = PhotoImage(file='image/filter_icon.png')      # filter image
+emailImage = PhotoImage(file='image/mail_icon3.png')        # mail image
+mapImage = PhotoImage(file='image/map_icon2.png')           # map image
+linkImage = PhotoImage(file='image/link.png')               # link image
+telegramImage = PhotoImage(file='image/telegram_icon.png')  # link image
+logoImage = PhotoImage(file='image/logo.gif')               # logo image
 
 def InitScreen():
     fontNormal = font.Font(window, size=15, family='나눔바른고딕')
     fontInfo = font.Font(window, size=10, family='나눔바른고딕')
+    fontLittle = font.Font(window, size=8, family='나눔바른고딕')   
 
     # 시(군) 선택 부분
     global CityListBox, clist
@@ -89,18 +94,28 @@ def InitScreen():
 
     # 선택된 필터 레이블 부분
     global filterButton
-    filterButton = Button(window, bg="white", command=resetFilter, text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
-    filterButton.place(x=410, y=90, width=120, height=120)
+    filterButton = Button(window, bg="white", command=resetFilter, font=fontLittle, text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+    filterButton.place(x=410, y=470 + 48, width=72, height=72)
     
     # 메일 부분
     global MailButton
     MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup)
-    MailButton.place(x=540, y=90, width=120, height=120)
+    MailButton.place(x=410 + 76, y=470 + 48, width=72, height=72)
 
     # 지도 부분
     global MapButton
     MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup)
-    MapButton.place(x=670, y=90, width=120, height=120)   
+    MapButton.place(x=410 + 76 * 2, y=470+ 48, width=72, height=72)   
+
+    # 링크 부분
+    global LinkButton
+    LinkButton = Button(window, image=linkImage, bg="white", command=onLink)
+    LinkButton.place(x=410 + 76 * 3, y=470+ 48, width=72, height=72)
+
+    # 텔레그램 부분
+    global TelegramButton
+    TelegramButton = Button(window, image=telegramImage, bg="white")
+    TelegramButton.place(x=410 + 76 * 4, y=470+ 48, width=72, height=72)   
 
     # 정보 부분
     global InfoLabel, ST
@@ -109,7 +124,7 @@ def InitScreen():
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
     ST = st.ScrolledText(window, font=fontInfo)
-    ST.place(x = 410, y= 220, width=380, height=370)
+    ST.place(x = 410, y= 170, width=380, height=370 + 48 - 80)
 
 def setCity(event):
     global selectedCity, CityListBox, clist, filterButton
@@ -165,9 +180,9 @@ def event_for_listbox(event):
                 '\n\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)  + \
                 '\n\n' + '[의료인수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
-                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
-                '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + getStr(item.find('BIZPLC_NM').text)    
+                '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) 
                 server.hospital_name = getStr(item.find('BIZPLC_NM').text)
+                
                 if item.find('REFINE_WGS84_LAT').text == None and item.find('REFINE_WGS84_LOGT').text == None:
                     server.latitude = 0.0
                     server.longitude = 0.0                  
@@ -175,7 +190,7 @@ def event_for_listbox(event):
                     server.latitude = float(item.find('REFINE_WGS84_LAT').text)
                     server.longitude = float(item.find('REFINE_WGS84_LOGT').text)
                 
-                print(server.latitude, server.longitude)
+                # print(server.latitude, server.longitude)
 
         server.info_text = info
 
@@ -201,8 +216,10 @@ def onSearch():     # '검색' 버튼 이벤트 처리
 
     SearchHospital(clist[cIdx], dlist[dIdx])
     # print(cSearchIndex, dSearchIndex)
-    
 
+def onLink():
+    url = 'https://www.google.com/search?q=' + server.hospital_name
+    webbrowser.open(url)
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):

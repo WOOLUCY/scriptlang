@@ -10,6 +10,8 @@ from tkinter import font
 import tkinter.scrolledtext as st
 import tkinter.messagebox as msgbox
 import tkintermapview
+from tkinter import font
+import pickle
 
 popup = inputEmail = btnEmail = None
 addrEmail = None
@@ -36,9 +38,18 @@ def onEmailInput():
     # 만든 mime을 MIMEBase에 첨부. 
     msg.attach(HtmlPart)
 
+    # # 파일로부터 읽어서 MIME 문서를 생성. 
+    # htmlFD = open("osm.html", 'rb')
+    # HtmlPart = MIMEText(htmlFD.read(),'html', _charset = 'UTF-8' )
+    # htmlFD.close()
+
+    # # 만든 mime을 MIMEBase에 첨부. 
+    # msg.attach(HtmlPart)  
+
     # 텍스트 형식의 본문 내용
     # text = MIMEText(data, 'plain')
-    text = MIMEText(server.info_text, _charset = 'UTF-8')
+    info = server.info_text + '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + server.hospital_name
+    text = MIMEText(info, _charset = 'UTF-8')
     # Data 영역의 메시지에 바운더리 추가
     msg.attach(text)
     # 메시지를 확인한다.
@@ -157,9 +168,10 @@ def onMapPopup():
     # root = Tk()
     # root.geometry(f"{800}x{600}")
     # root.title("map_view_example.py")
+    fontNormal = font.Font(popup, size=24, family='나눔바른고딕')
 
     if server.latitude == 0 and server.longitude == 0:
-        emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.")
+        emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.", font=fontNormal)
         emptyLabel.pack()
 
     else:
@@ -169,7 +181,7 @@ def onMapPopup():
         marker_1 = map_widget.set_position(server.latitude, server.longitude, marker=True) # 위도,경도 위치지정
         # 주소 위치지정 
         # marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True)
-        print(marker_1.position, marker_1.text) # get position and text 
+        # print(marker_1.position, marker_1.text) # get position and text 
         marker_1.set_text(server.hospital_name) # set new text 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
 
