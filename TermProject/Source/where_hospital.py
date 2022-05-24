@@ -218,7 +218,7 @@ def onSearch():     # '검색' 버튼 이벤트 처리
     # print(cSearchIndex, dSearchIndex)
 
 def onLink():
-    url = 'https://www.google.com/search?q=' + server.hospital_name
+    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + server.hospital_name
     webbrowser.open(url)
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
