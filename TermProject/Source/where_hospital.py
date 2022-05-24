@@ -3,7 +3,7 @@ from msilib.schema import ListBox
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
-from mail_send import *
+from pop_up import *
 import server
 
 window = Tk()
@@ -18,8 +18,8 @@ mapImage = PhotoImage(file='image/map.png')        # naver map image
 logoImage = PhotoImage(file='image/logo.gif')      # logo image
 
 def InitScreen():
-    fontNormal = font.Font(window, size=15, weight='bold', family='굴림')
-    fontInfo = font.Font(window, size=9, weight='bold', family='굴림')
+    fontNormal = font.Font(window, size=15, family='나눔바른고딕')
+    fontInfo = font.Font(window, size=10, family='나눔바른고딕')
 
     # 시(군) 선택 부분
     global CityListBox, clist
@@ -99,7 +99,7 @@ def InitScreen():
 
     # 지도 부분
     global MapButton
-    MapButton = Button(window, image=mapImage, bg="white")
+    MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup)
     MapButton.place(x=670, y=90, width=120, height=120)   
 
     # 정보 부분
@@ -108,7 +108,7 @@ def InitScreen():
     # InfoLabel = Label(text = TempText, font=fontInfo, bg="#bebebe", justify="left")
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
-    ST = st.ScrolledText(window)
+    ST = st.ScrolledText(window, font=fontInfo)
     ST.place(x = 410, y= 220, width=380, height=370)
 
 def setCity(event):
@@ -167,7 +167,7 @@ def event_for_listbox(event):
                 '\n\n' + '[입원실수]' + '\n' +getStr(item.find('HOSPTLRM_CNT').text) + \
                 '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) + \
                 '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + getStr(item.find('BIZPLC_NM').text)    
-                server.hospital_name = getStr(item.find('BIZPLC_NM').text)    
+                server.hospital_name = getStr(item.find('BIZPLC_NM').text)
         server.info_text = info
 
         # InfoLabel.configure(text=info)
