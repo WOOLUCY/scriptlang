@@ -1,7 +1,8 @@
 # from audioop import add
 # from ctypes import addressof
 from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText # MIMEtexe 생성에 사용
+from email.mime.text import MIMEText
+from msilib.schema import Font # MIMEtexe 생성에 사용
 # from http.client import HTTPSConnection
 # from mimetypes import MimeTypes
 from tkinter import *
@@ -175,17 +176,24 @@ def onMapPopup():
         emptyLabel.pack()
 
     else:
-        map_widget = tkintermapview.TkinterMapView(popup, width=800, height=600, corner_radius=0) 
-        map_widget.pack()
+        map_widget = tkintermapview.TkinterMapView(popup, width=800, height=550, corner_radius=0) 
+        map_widget.place(x=0, y=0, width=800, height=550)
 
         # 주소 위치지정 
-        marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True) 
+        marker_1 = map_widget.set_address("경기도 시흥시 산기대학로 237", marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") 
         marker_1.set_text("한국공학대학교")
 
-        marker_2 = map_widget.set_position(server.latitude, server.longitude, marker=True) # 위도,경도 위치지정
+        marker_2 = map_widget.set_position(server.latitude, server.longitude, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
         marker_2.set_text(server.hospital_name) # set new text
 
         path_1 = map_widget.set_path([marker_1.position, marker_2.position]) 
+
+
+        addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
+        addressLabel.place(x=0, y=550, width=750, height=50)
+
+        InputButton = Button(popup, font=fontNormal, text='검색')
+        InputButton.place(x=720, y=550, width=50, height=50)
 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
 

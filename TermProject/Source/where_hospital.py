@@ -13,7 +13,7 @@ window.geometry("800x600+450+200")
 window.resizable(False, False)
 window.configure(bg='white')
 
-# searchImage = PhotoImage(file='image/search.png')       # search image
+searchImage = PhotoImage(file='image/search.png')       # search image
 filterImage = PhotoImage(file='image/filter_icon.png')      # filter image
 emailImage = PhotoImage(file='image/mail_icon3.png')        # mail image
 mapImage = PhotoImage(file='image/map_icon2.png')           # map image
@@ -61,10 +61,10 @@ def InitScreen():
     # 사용자 입력부분
     global InputLabel
     InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=3, relief='ridge')
-    InputLabel.place(x=110, y=170, width=230, height=70)
+    InputLabel.place(x=110, y=170, width=220, height=70)
 
-    InputButton = Button(window, font=fontNormal, text='검색', command=onSearch)
-    InputButton.place(x=110 + 230, y=170, width=60, height=70)
+    InputButton = Button(window, font=fontNormal, image=searchImage, command=onSearch, bg="white")
+    InputButton.place(x=110 + 220, y=170, width=70, height=70)
 
     # 목록 부분
     global listBox
