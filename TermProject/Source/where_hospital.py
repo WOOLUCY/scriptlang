@@ -6,6 +6,7 @@ from tkinter import font
 import tkinter.scrolledtext as st
 from pop_up import *
 import server
+from graph import *
 
 window = Tk()
 window.title("Where the Hospital")
@@ -20,6 +21,7 @@ mapImage = PhotoImage(file='image/map_icon2.png')           # map image
 linkImage = PhotoImage(file='image/link.png')               # link image
 telegramImage = PhotoImage(file='image/telegram_icon.png')  # link image
 logoImage = PhotoImage(file='image/logo.gif')               # logo image
+graphImage = PhotoImage(file='image/trend.png')             # graph image
 
 def InitScreen():
     fontNormal = font.Font(window, size=15, family='나눔바른고딕')
@@ -97,10 +99,10 @@ def InitScreen():
     LogoLable = Label(window, image=logoImage, bg="white")
     LogoLable.place(x=410, y=10, width=380, height=70)
 
-    # 선택된 필터 레이블 부분
-    global filterButton
-    filterButton = Button(window, bg="white", command=resetFilter, font=fontLittle, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
-    filterButton.place(x=410, y=470 + 48, width=72, height=72)
+    # 그래프 부분
+    global GraphButton
+    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup)
+    GraphButton.place(x=410, y=470 + 48, width=72, height=72)
     
     # 메일 부분
     global MailButton
@@ -132,7 +134,7 @@ def InitScreen():
     ST.place(x = 410, y= 170, width=380, height=370 + 48 - 80)
 
 def setCity(event):
-    global selectedCity, CityListBox, clist, filterButton
+    global selectedCity, CityListBox, clist, ResetButton
     sel = event.widget.curselection()
     if sel:
         selectedCity = sel
@@ -140,7 +142,7 @@ def setCity(event):
         ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
 
 def setDept(event):
-    global selectedDept, filterButton
+    global selectedDept, ResetButton
     sel = event.widget.curselection()
     if sel:
         selectedDept = sel
@@ -152,7 +154,7 @@ def resetFilter():
     # print(selectedCity)
     selectedCity = [0]
     selectedDept = [0]
-    filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))   
+    ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))   
     # print(selectedCity)
 
     global listBox

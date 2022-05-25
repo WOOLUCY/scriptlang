@@ -1,13 +1,25 @@
 from tkinter import * 
 import server
+from tkinter import font
 
 def onGraphPopup(): 
-    print("reset button clicked")
+    global popup
+    print("graph button clicked")
+    popup = Toplevel()
+    popup.geometry("1200x400+100+100")
+    popup.title("경기도 병원 현황 내 시군별 병원 그래프")
+    popup.resizable(False, False)
+
+    w = Canvas(popup, width = 1200, height=400, bg='white') 
+    w.place(relx=.5, rely=.5,anchor= CENTER) # 한가운데 위치
+
+    getData()
     
-
-
+    drawGraph(w, server.hList[1:], 1200, 400)
 
 def drawGraph(canvas, data, canvasWidth, canvasHeight):
+    fontLittle = font.Font(popup, size=8, family='나눔바른고딕') 
+
     canvas.delete("grim") # 기존 그림 지우기
     if not len(data): # 데이터 없으면 return
         canvas.create_text(canvasWidth/2,(canvasHeight/2), text="No Data", tags="grim")
@@ -40,17 +52,26 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
         # 위에 값, 아래에 번호. 
         canvas.create_text((left+right)//2, top-10, text=data[i], tags="grim") 
-        canvas.create_text((left+right)//2, bottom+10, text=server.city_list[i+1], tags="grim")
+        canvas.create_text((left+right)//2, bottom+10, text=server.city_list[i + 1], font = fontLittle, tags="grim")
 
-window = Tk() 
-window.title('tkinter notebook') 
-window.geometry("1200x400+200+100")
+def getData():
+    # 클릭 시, 정보 출력
+    from xml.etree import ElementTree
+    with open('경기도병원현황.xml', 'rb') as f:
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml)
 
-w = Canvas(window, width = 1200, height=400, bg='green') 
-w.place(relx=.5, rely=.5,anchor= CENTER) # 한가운데 위치
+    elements = parseData.iter('row')
+    for item in elements:   # 'row' element들
+        # if item.find('SIGUN_NM').text in hList
+        for i, city in enumerate(server.city_list):
+            if item.find('SIGUN_NM').text == city:
+                server.hList[i] += 1           
+    # for i, city in enumerate(server.hList):
+    #     print(server.city_list[i], city)
 
-#drawGraph(w, [], 300, 300) # 시험용 데이터
-#drawGraph(w, [670, 900, 150], 300, 300) # 시험용 데이터
-drawGraph(w, [100, 200, 670, 900, 150], 1200, 400)
-
-window.mainloop()
+if __name__ == '__main__':
+    onGraphPopup()
+    print("\graph.py runned\n")
+else:
+    print("\graph.py imported\n")

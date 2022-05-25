@@ -163,6 +163,7 @@ def getStr(s):
     return '정보없음' if not s else s
 
 def onMapPopup():
+    global popup
     popup = Toplevel()
     popup.geometry("800x600+100+100")
     popup.title("<" + server.hospital_name + "> 의 지도")
