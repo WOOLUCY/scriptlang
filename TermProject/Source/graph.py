@@ -1,4 +1,11 @@
 from tkinter import * 
+import server
+
+def onGraphPopup(): 
+    print("reset button clicked")
+    
+
+
 
 def drawGraph(canvas, data, canvasWidth, canvasHeight):
     canvas.delete("grim") # 기존 그림 지우기
@@ -33,17 +40,17 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
         # 위에 값, 아래에 번호. 
         canvas.create_text((left+right)//2, top-10, text=data[i], tags="grim") 
-        canvas.create_text((left+right)//2, bottom+10, text=i+1, tags="grim")
+        canvas.create_text((left+right)//2, bottom+10, text=server.city_list[i+1], tags="grim")
 
 window = Tk() 
 window.title('tkinter notebook') 
-window.geometry("800x600+200+100")
+window.geometry("1200x400+200+100")
 
-w = Canvas(window, width = 800, height=600, bg='green') 
+w = Canvas(window, width = 1200, height=400, bg='green') 
 w.place(relx=.5, rely=.5,anchor= CENTER) # 한가운데 위치
 
 #drawGraph(w, [], 300, 300) # 시험용 데이터
 #drawGraph(w, [670, 900, 150], 300, 300) # 시험용 데이터
-drawGraph(w, [100, 200, 670, 900, 150], 800, 600)
+drawGraph(w, [100, 200, 670, 900, 150], 1200, 400)
 
 window.mainloop()

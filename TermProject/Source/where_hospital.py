@@ -66,6 +66,11 @@ def InitScreen():
     InputButton = Button(window, font=fontNormal, image=searchImage, command=onSearch, bg="white")
     InputButton.place(x=110 + 220, y=170, width=70, height=70)
 
+    # 필터 초기화 버튼 부분
+    global ResetButton
+    ResetButton = Button(window, bg="white", command=resetFilter, font=fontNormal, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
+    ResetButton.place(x=410, y=90, width=380, height=70 )
+
     # 목록 부분
     global listBox
     ListScrollBar = Scrollbar(window)
@@ -94,7 +99,7 @@ def InitScreen():
 
     # 선택된 필터 레이블 부분
     global filterButton
-    filterButton = Button(window, bg="white", command=resetFilter, font=fontLittle, text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+    filterButton = Button(window, bg="white", command=resetFilter, font=fontLittle, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
     filterButton.place(x=410, y=470 + 48, width=72, height=72)
     
     # 메일 부분
@@ -132,14 +137,14 @@ def setCity(event):
     if sel:
         selectedCity = sel
         # print(selectedCity[0])
-        filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+        ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
 
 def setDept(event):
     global selectedDept, filterButton
     sel = event.widget.curselection()
     if sel:
         selectedDept = sel
-        filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))
+        ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
         # print(selectedDept[0])    
 
 def resetFilter():
@@ -147,7 +152,7 @@ def resetFilter():
     # print(selectedCity)
     selectedCity = [0]
     selectedDept = [0]
-    filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\n" + getStr(dlist[selectedDept[0]]))   
+    filterButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))   
     # print(selectedCity)
 
     global listBox
