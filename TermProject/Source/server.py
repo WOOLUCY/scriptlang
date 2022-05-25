@@ -27,6 +27,9 @@ hList = [0 for i in city_list]
 
 mail_list = []
 
+mouse_x = 0
+mouse_y = 0
+
 if __name__ == '__main__':
     print("\nserver.py runned\n")
 else:

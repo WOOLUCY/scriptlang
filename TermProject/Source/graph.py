@@ -1,4 +1,9 @@
-from tkinter import * 
+from gc import callbacks
+from http.client import CannotSendHeader
+from msilib import sequence
+from tkinter import *
+
+from click import command 
 import server
 from tkinter import font
 
@@ -9,6 +14,7 @@ def onGraphPopup():
     popup.geometry("1200x400+100+100")
     popup.title("경기도 병원 현황 내 시군별 병원 그래프")
     popup.resizable(False, False)
+    popup.bind('<Button-1>', mouseClicked)
 
     w = Canvas(popup, width = 1200, height=400, bg='white') 
     w.place(relx=.5, rely=.5,anchor= CENTER) # 한가운데 위치
@@ -16,6 +22,7 @@ def onGraphPopup():
     getData()
     
     drawGraph(w, server.hList[1:], 1200, 400)
+
 
 def drawGraph(canvas, data, canvasWidth, canvasHeight):
     fontLittle = font.Font(popup, size=8, family='나눔바른고딕') 
@@ -38,6 +45,7 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
     rectWidth = (canvasWidth // nData) # 데이터 1개의 폭. 
     bottom = canvasHeight - 20 # bar의 bottom 위치 
     maxheight = canvasHeight - 40 # bar의 최대 높이.(위/아래 각각 20씩 여유.)
+
     for i in range(nData): # 각 데이터에 대해.. 
         # max/min은 특별한 색으로.
         if nMax == data[i]: color="red" 
@@ -48,11 +56,21 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
         top = bottom - curHeight # bar의 top 위치
         left = i * rectWidth # bar의 left 위치
         right = (i + 1) * rectWidth # bar의 right 위치
-        canvas.create_rectangle(left, top, right, bottom, fill=color, tag="grim", activefill='yellow')
+
+        city = server.city_list[i + 1]
+        canvas.create_rectangle(left, top, right, bottom, fill=color, tags=city, activefill='yellow')
+        canvas.tag_bind(city, "<Button-1>", clicked(city))
 
         # 위에 값, 아래에 번호. 
         canvas.create_text((left+right)//2, top-10, text=data[i], tags="grim") 
         canvas.create_text((left+right)//2, bottom+10, text=server.city_list[i + 1], font = fontLittle, tags="grim")
+
+def clicked(*args, city):
+    print(city)
+    
+
+def getCity():
+    print("hello")
 
 def getData():
     # 클릭 시, 정보 출력
@@ -69,6 +87,11 @@ def getData():
                 server.hList[i] += 1           
     # for i, city in enumerate(server.hList):
     #     print(server.city_list[i], city)
+
+def mouseClicked(event):
+    server.mouse_x= event.x
+    server.mouse_y= event.y
+    print("Pointer is currently at %d, %d" %(server.mouse_x,server.mouse_y))
 
 if __name__ == '__main__':
     onGraphPopup()
