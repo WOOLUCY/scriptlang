@@ -96,7 +96,7 @@ def onEmailPopup():
     addrEmail = None 
     popup = Toplevel() # popup 띄우기
     popup.geometry("300x240+650+400")
-    popup.title("받을 이메일 주소 입력")
+    popup.title("병원 정보 이메일 보내기")
     popup.resizable(False, False)
 
     fontNormal = font.Font(popup, size=10, weight='bold', family='G마켓 산스 TTF Light')
@@ -108,7 +108,7 @@ def onEmailPopup():
     inputEmail = Entry(popup, font=fontNormal)
     inputEmail.place(x=10,y = 35, width = 250, height= 30)
 
-    btnEmail = Button(popup, text="추가", font=fontNormal, command=event_for_add)
+    btnEmail = Button(popup, text="추가", font=fontNormal, command=event_for_add, cursor="hand2")
     btnEmail.place(x=260,y = 35, width = 30, height= 30)
 
     mailListBox = Listbox(popup, selectmode='extended', font=fontNormal, width=10, height=15, \
@@ -128,7 +128,7 @@ def onEmailPopup():
 
     mailListBox.place(x=10, y=70, width=280, height=120)
 
-    btnEmail = Button(popup, text="메일 보내기", command=onEmailInput, font=fontNormal)
+    btnEmail = Button(popup, text="메일 보내기", command=onEmailInput, font=fontNormal, cursor="hand2")
     btnEmail.place(x=10,y = 195, width = 280, height= 30)
 
 

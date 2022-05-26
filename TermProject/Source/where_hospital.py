@@ -1,5 +1,6 @@
 # from ctypes import addressof
 # from msilib.schema import ListBox
+from cProfile import label
 import webbrowser
 from tkinter import *
 from tkinter import font
@@ -25,6 +26,7 @@ telegramImage = PhotoImage(file='image/telegram_icon.png')  # link image
 logoImage = PhotoImage(file='image/logo.gif')               # logo image
 graphImage = PhotoImage(file='image/trend.png')             # graph image
 noImage = PhotoImage(file='image/close.png')                # no image
+labelImage = PhotoImage(file='image/label.png')             # no image
 
 def InitScreen():
     fontNormal = font.Font(window, size=14, family='G마켓 산스 TTF Medium')
@@ -35,7 +37,7 @@ def InitScreen():
     # 시(군) 선택 부분
     global CityListBox, clist
     CityScrollbar = Scrollbar(window)
-    CityListBox = Listbox(window, activestyle='dotbox',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set) 
+    CityListBox = Listbox(window, activestyle='dotbox',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set, cursor="hand2") 
     global selectedCity
     selectedCity = [0]
     CityListBox.bind('<<ListboxSelect>>', setCity)
@@ -46,13 +48,13 @@ def InitScreen():
 
     CityListBox.place(x=110, y=10, width=280 - 10, height=70)
 
-    CityScrollbar.config(command=CityListBox.yview) 
+    CityScrollbar.config(command=CityListBox.yview, cursor="sb_v_double_arrow") 
     CityScrollbar.place(x=390 - 10, y=10, width=20, height=70)
 
     # 진료 과목 내용 정보
     global DeptListBox, dlist
     DeptScrollbar = Scrollbar(window)
-    DeptListBox = Listbox(window, activestyle='dotbox', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set) 
+    DeptListBox = Listbox(window, activestyle='dotbox', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set, cursor="hand2") 
     global selectedDept
     selectedDept = [0]
     DeptListBox.bind('<<ListboxSelect>>', setDept)
@@ -61,71 +63,71 @@ def InitScreen():
         DeptListBox.insert(i, s)
     DeptListBox.place(x=110, y=90, width=280 - 10, height=70) 
 
-    DeptScrollbar.config(command=DeptListBox.yview) 
+    DeptScrollbar.config(command=DeptListBox.yview, cursor="sb_v_double_arrow") 
     DeptScrollbar.place(x=390 - 10, y=90, width=20, height=70)
 
     # 사용자 입력부분
     global InputLabel
-    InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=3, relief='ridge')
+    InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=3, relief='ridge', cursor="xterm")
     InputLabel.place(x=110, y=170, width=220, height=70)
 
-    InputButton = Button(window, font=fontNormal, image=searchImage, command=onSearch, bg="white")
+    InputButton = Button(window, font=fontNormal, image=searchImage, command=onSearch, bg="white",cursor="hand2", overrelief="groove", activebackground= "dark grey")
     InputButton.place(x=110 + 220, y=170, width=70, height=70)
 
     # 필터 초기화 버튼 부분
     global ResetButton
-    ResetButton = Button(window, bg="white", command=resetFilter, font=fontNormal, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
+    ResetButton = Button(window, bg="white", command=resetFilter, font=fontNormal, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]), cursor="hand2", overrelief="sunken")
     ResetButton.place(x=410, y=90, width=380, height=70 )
 
     # 목록 부분
     global listBox
     ListScrollBar = Scrollbar(window)
     listBox = Listbox(window, selectmode='extended', font=fontList, width=10, height=15, \
-        borderwidth=5, relief='ridge', yscrollcommand=ListScrollBar.set)
+        borderwidth=5, relief='ridge', yscrollcommand=ListScrollBar.set, cursor="hand2")
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.place(x = 10, y = 250, width=380 - 10, height=340)
 
     ListScrollBar.place(x = 390 - 10, y = 250, width=20, height=340)
-    ListScrollBar.config(command=listBox.yview)
+    ListScrollBar.config(command=listBox.yview, cursor="sb_v_double_arrow")
 
     # 분류 제목 부분
-    global CityLabel, TypeLabel, DeptLabel
-    CityLabel = Label(window, text="시(군) 선택", font=fontLabel, bg="#bebebe")
-    DeptLabel = Label(window, text="진료 과목", font=fontLabel, bg="#bebebe")
-    SearchLabel = Label(window, text="병원명", font=fontLabel, bg="#bebebe")
+    global CityLabel, NameLabel, DeptLabel
+    CityLabel = Label(window, text="시(군) 선택", font=fontLabel, bg = "white", image=labelImage, compound='center')
+    DeptLabel = Label(window, text="진료 과목", font=fontLabel, bg = "white", image=labelImage, compound='center')
+    NameLabel = Label(window, text="병원명", font=fontLabel, bg = "white", image=labelImage, compound='center')
 
     CityLabel.place(x=10, y=10, width=100, height=70)
     DeptLabel.place(x=10, y=90, width=100, height=70)
-    SearchLabel.place(x=10, y=170, width=100, height=70)
+    NameLabel.place(x=10, y=170, width=100, height=70)
 
     # 로고 부분
     global LogoLabel
-    LogoLable = Button(window, image=logoImage, bg="white", command=onLogo, relief="flat")
+    LogoLable = Button(window, image=logoImage, bg="white", command=onLogo, relief="flat", activebackground= "dark grey", cursor="hand2", overrelief="groove")
     LogoLable.place(x=410, y=10, width=380, height=70)
 
     # 그래프 부분
     global GraphButton
-    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup)
+    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup, activebackground= "dark grey", overrelief="sunken")
     GraphButton.place(x=410, y=170, width=72, height=72)
     
     # 메일 부분
     global MailButton
-    MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup)
+    MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     MailButton.place(x=410 + 76, y=170, width=72, height=72)
 
     # 지도 부분
     global MapButton
-    MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup)
+    MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     MapButton.place(x=410 + 76 * 2, y=170, width=72, height=72)   
 
     # 링크 부분
     global LinkButton
-    LinkButton = Button(window, image=linkImage, bg="white", command=onLink)
+    LinkButton = Button(window, image=linkImage, bg="white", command=onLink, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     LinkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
 
     # 텔레그램 부분
     global TelegramButton
-    TelegramButton = Button(window, image=telegramImage, bg="white")
+    TelegramButton = Button(window, image=telegramImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     TelegramButton.place(x=410 + 76 * 4, y=170, width=72, height=72)   
 
     # 정보 부분
@@ -134,7 +136,7 @@ def InitScreen():
     # InfoLabel = Label(text = TempText, font=fontInfo, bg="#bebebe", justify="left")
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
-    ST = st.ScrolledText(window, font=fontInfo)
+    ST = st.ScrolledText(window, font=fontInfo, cursor="arrow")
     ST.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
 
 def setCity(event):

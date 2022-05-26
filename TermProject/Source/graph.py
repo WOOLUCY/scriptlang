@@ -54,9 +54,9 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
     for i in range(nData): # 각 데이터에 대해.. 
         # max/min은 특별한 색으로.
-        if nMax == data[i]: color="red" 
-        elif nMin == data[i]: color='blue' 
-        else: color="grey"    
+        if nMax == data[i]: color="skyblue3" 
+        elif nMin == data[i]: color='light pink' 
+        else: color="ivory2"    
 
         curHeight = maxheight * data[i] / nMax # 최대값에 대한 비율 반영
         top = bottom - curHeight # bar의 top 위치
@@ -66,7 +66,7 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
         topList.append(top)
 
         city = server.city_list[i + 1]
-        canvas.create_rectangle(left, top, right, bottom, fill=color, tags=city, activefill='yellow')
+        canvas.create_rectangle(left, top, right, bottom, fill=color, tags=city, activefill='ivory4')
 
         # 위에 값, 아래에 번호. 
         canvas.create_text((left+right)//2, top-10, text=data[i], tags="grim") 

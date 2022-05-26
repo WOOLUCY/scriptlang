@@ -19,7 +19,7 @@ def onMapPopup():
     # root = Tk()
     # root.geometry(f"{800}x{600}")
     # root.title("map_view_example.py")
-    fontNormal = font.Font(popup, size=24, family='G마켓 산스 TTF Medium')
+    fontNormal = font.Font(popup, size=18, family='G마켓 산스 TTF Medium')
 
     if server.latitude == 0 and server.longitude == 0:
         emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.", font=fontNormal)
@@ -41,13 +41,13 @@ def onMapPopup():
         addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
         addressLabel.place(x=0, y=550, width=650, height=50)
 
-        InputButton = Button(popup, font=fontNormal, image=searchImage, command=onSearch, bg = "white")
+        InputButton = Button(popup, font=fontNormal, image=searchImage, command=onSearch, bg = "white", cursor="hand2")
         InputButton.place(x=650, y=550, width=50, height=50)   
 
-        HospitalButton = Button(popup, font=fontNormal, image=hospitalImage, command=onHospital, bg="white")
+        HospitalButton = Button(popup, font=fontNormal, image=hospitalImage, command=onHospital, bg="white", cursor="hand2")
         HospitalButton.place(x=700, y=550, width=50, height=50)   
 
-        SatButton = Button(popup, font=fontNormal, command=onSat, image=satelliteImage, bg="white")
+        SatButton = Button(popup, font=fontNormal, command=onSat, image=satelliteImage, bg="white", cursor="hand2")
         SatButton.place(x=750, y=550, width=50, height=50)  
 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
