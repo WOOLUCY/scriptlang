@@ -7,6 +7,7 @@ from msilib.schema import Font # MIMEtexe 생성에 사용
 # from http.client import HTTPSConnection
 # from mimetypes import MimeTypes
 from tkinter import *
+
 import server
 from tkinter import font
 import tkinter.scrolledtext as st
@@ -59,6 +60,8 @@ def onEmailInput():
     try:
         sendMail('kikanaidek@gmail.com', addrEmail, msg)
         msgbox.showinfo("알림", "정상적으로 메일을 보냈습니다.")
+        inputEmail.focus_set()
+        inputEmail.delete(0, 'end')
         # onEmailPopup()
         # popup.destroy() # popup 내리기
     except:
@@ -79,8 +82,11 @@ def event_for_add():
             else:
                 response = msgbox.askretrycancel("Error", "유효하지 않은 메일입니다. 다시 시도하시겠습니까?")
                 if response == 1: 
-                    onEmailPopup()
+                    inputEmail.focus_set()
+                    inputEmail.delete(0, 'end')
+                    
                 elif response == 0: 
+                    popup.destroy()
                     pass
         elif str in server.mail_list:
             response = msgbox.askretrycancel("Error", "이미 리스트에 있는 메일입니다. 다시 시도하시겠습니까?")

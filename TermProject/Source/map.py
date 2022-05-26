@@ -62,6 +62,8 @@ def onSearch():
     path_1 = map_widget.set_path([marker_1.position, marker_2.position]) 
     map_widget.set_position(server.latitude, server.longitude)
 
+    addressLabel.delete(0, 'end')
+
     map_widget.set_zoom(15)
 
 def onHospital():
