@@ -17,7 +17,7 @@ from server import window
 # window.resizable(False, False)
 # window.configure(bg='white')
 
-searchImage = PhotoImage(file='image/search.png')       # search image
+searchImage = PhotoImage(file='image/search.png')           # search image
 filterImage = PhotoImage(file='image/filter_icon.png')      # filter image
 emailImage = PhotoImage(file='image/mail_icon3.png')        # mail image
 mapImage = PhotoImage(file='image/map_icon2.png')           # map image
@@ -239,8 +239,9 @@ def onLogo():
     webbrowser.open(url)
 
 def onLink():
-    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + server.hospital_name
-    webbrowser.open(url)
+    if server.hospital_name:
+        url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + server.hospital_name
+        webbrowser.open(url)
 
 # 유틸리티 함수: 문자열 내용 있을 때만 사용
 def getStr(s):

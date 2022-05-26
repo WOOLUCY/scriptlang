@@ -11,6 +11,7 @@ hospitalImage = PhotoImage(file='image/hospital.png')               # hospital i
 searchImage = PhotoImage(file='image/little_search.png')               # hospital image
 
 def onMapPopup():
+    if server.hospital_name == None: return
     global popup
     popup = Toplevel()
     popup.geometry("800x600+100+100")
