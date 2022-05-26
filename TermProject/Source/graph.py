@@ -2,6 +2,7 @@ from gc import callbacks
 from http.client import CannotSendHeader
 from msilib import sequence
 from tkinter import *
+import tkintermapview
 
 from click import command
 from numpy import insert 
@@ -107,8 +108,42 @@ def mouseClicked(event):
         if left <= server.mouse_x < leftList[i + 1]:
             if ( topList[i] < server.mouse_y):
                 print(server.city_list[i+1])
+                onMapPopup(server.city_list[i+1])
 
 
+def onMapPopup(city):
+    global map_popup
+    map_popup = Toplevel()
+    map_popup.geometry("800x600+100+100")
+    map_popup.title("<" + city + "> 내 병원")
+
+    fontNormal = font.Font(map_popup, size=24, family='나눔바른고딕')
+
+    global map_widget
+    map_widget = tkintermapview.TkinterMapView(map_popup, width=800, height=600, corner_radius=0) 
+    map_widget.place(x=0, y=0, width=800, height=600)
+
+    from xml.etree import ElementTree
+    with open('경기도병원현황.xml', 'rb') as f:
+        strXml = f.read().decode('utf-8')
+    parseData = ElementTree.fromstring(strXml)
+
+    elements = parseData.iter('row')
+    for item in elements:   # 'row' element들
+        # if item.find('SIGUN_NM').text in hList
+        if item.find('SIGUN_NM').text == city and getStr(item.find('REFINE_WGS84_LAT').text) != '정보없음' and getStr(item.find('REFINE_WGS84_LOGT').text) != '정보없음':
+            # 주소 위치지정 
+            lat = float(item.find('REFINE_WGS84_LAT').text)
+            logt = float(item.find('REFINE_WGS84_LOGT').text)
+            print(lat, logt)
+            marker_1 = map_widget.set_position(lat, logt, \
+                marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
+            marker_1.set_text(item.find('BIZPLC_NM').text) # set new text
+
+            map_widget.set_zoom(13)
+
+def getStr(s):
+    return '정보없음' if not s else s
 
 if __name__ == '__main__':
     onGraphPopup()
