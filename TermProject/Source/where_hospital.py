@@ -107,7 +107,7 @@ def InitScreen():
 
     # 그래프 부분
     global GraphButton
-    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup, activebackground= "dark grey", overrelief="sunken")
+    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     GraphButton.place(x=410, y=170, width=72, height=72)
     
     # 메일 부분
