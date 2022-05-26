@@ -4,9 +4,10 @@ import webbrowser
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
-from pop_up import *
+from mail import *
 import server
 from graph import *
+from map import *
 
 window = Tk()
 window.title("Where the Hospital")

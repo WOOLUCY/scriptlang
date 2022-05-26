@@ -121,6 +121,7 @@ def onMapPopup(city):
 
     global map_widget
     map_widget = tkintermapview.TkinterMapView(map_popup, width=800, height=600, corner_radius=0) 
+    map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22) 
     map_widget.place(x=0, y=0, width=800, height=600)
 
     from xml.etree import ElementTree
@@ -135,9 +136,8 @@ def onMapPopup(city):
             # 주소 위치지정 
             lat = float(item.find('REFINE_WGS84_LAT').text)
             logt = float(item.find('REFINE_WGS84_LOGT').text)
-            print(lat, logt)
             marker_1 = map_widget.set_position(lat, logt, \
-                marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
+                marker=True, marker_color_outside="grey", marker_color_circle="white") # 위도,경도 위치지정
             marker_1.set_text(item.find('BIZPLC_NM').text) # set new text
 
             map_widget.set_zoom(13)
@@ -147,6 +147,6 @@ def getStr(s):
 
 if __name__ == '__main__':
     onGraphPopup()
-    print("\graph.py runned\n")
+    print("graph.py runned\n")
 else:
-    print("\graph.py imported\n")
+    print("graph.py imported\n")

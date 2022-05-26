@@ -11,9 +11,7 @@ import server
 from tkinter import font
 import tkinter.scrolledtext as st
 import tkinter.messagebox as msgbox
-import tkintermapview
 from tkinter import font
-import pickle
 
 popup = inputEmail = btnEmail = None
 addrEmail = None
@@ -162,71 +160,8 @@ def event_for_mailListbox(event):
 def getStr(s):
     return '정보없음' if not s else s
 
-def onMapPopup():
-    global popup
-    popup = Toplevel()
-    popup.geometry("800x600+100+100")
-    popup.title("<" + server.hospital_name + "> 의 지도")
-
-    # root = Tk()
-    # root.geometry(f"{800}x{600}")
-    # root.title("map_view_example.py")
-    fontNormal = font.Font(popup, size=24, family='나눔바른고딕')
-
-    if server.latitude == 0 and server.longitude == 0:
-        emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.", font=fontNormal)
-        emptyLabel.pack()
-
-    else:
-        global map_widget, marker_1
-        map_widget = tkintermapview.TkinterMapView(popup, width=800, height=550, corner_radius=0) 
-        map_widget.place(x=0, y=0, width=800, height=550)
-
-        # 주소 위치지정 
-        marker_1 = map_widget.set_position(server.latitude, server.longitude, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
-        marker_1.set_text(server.hospital_name) # set new text
-
-        global addressLabel
-        addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
-        addressLabel.place(x=0, y=550, width=750 - 100 - 20, height=50)
-
-        InputButton = Button(popup, font=fontNormal, text='검색', command=onSearch)
-        InputButton.place(x=750 - 100 - 20, y=550, width=50, height=50)
-
-        HospitalButton = Button(popup, font=fontNormal, text='병원', command=onHospital)
-        HospitalButton.place(x=750 - 100 - 20 + 60, y=550, width=50, height=50)
-
-        DestButton = Button(popup, font=fontNormal, text='지정', command=onDest)
-        DestButton.place(x=750 - 100 - 20 + 60 + 60, y=550, width=50, height=50)        
-
-        map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
-
-        
-
-def onSearch():
-    global destAddr, marker_2
-    destAddr = addressLabel.get()
-    marker_2 = map_widget.set_address(destAddr, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") 
-    marker_2.set_text(destAddr)
-
-    path_1 = map_widget.set_path([marker_1.position, marker_2.position]) 
-
-def onHospital():
-    global marker_1
-    print(server.latitude, server.longitude)
-    map_widget.set_position(server.latitude, server.longitude)
-
-def onDest():
-    global marker_2
-    map_widget.set_position(marker_2.position[0],marker_2.position[1] )
-    print(marker_2.position[0],marker_2.position[1])
-
-
-
-
 if __name__ == '__main__':
     onEmailPopup()
-    onMapPopup()
     print("\npop_up.py runned\n")
 else:
     print("\npop_up.py imported\n")
