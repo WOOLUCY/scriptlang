@@ -99,7 +99,7 @@ def onEmailPopup():
     popup.title("받을 이메일 주소 입력")
     popup.resizable(False, False)
 
-    fontNormal = font.Font(popup, size=10, weight='bold', family='나눔바른고딕')
+    fontNormal = font.Font(popup, size=10, weight='bold', family='G마켓 산스 TTF Light')
 
     global inputEmail, btnEmail, textLabel, mailListBox, btnSend
     textLabel = Label(popup, text="받을 이메일을 입력하세요", font=fontNormal)

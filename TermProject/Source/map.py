@@ -3,6 +3,13 @@ import server
 import tkintermapview
 from tkinter import font
 
+isSatellite = True
+
+satelliteImage = PhotoImage(file='image/satellite.png')             # satellite image
+normalImage = PhotoImage(file='image/normal_map.png')               # map image
+hospitalImage = PhotoImage(file='image/hospital.png')               # hospital image
+searchImage = PhotoImage(file='image/little_search.png')               # hospital image
+
 def onMapPopup():
     global popup
     popup = Toplevel()
@@ -12,7 +19,7 @@ def onMapPopup():
     # root = Tk()
     # root.geometry(f"{800}x{600}")
     # root.title("map_view_example.py")
-    fontNormal = font.Font(popup, size=24, family='나눔바른고딕')
+    fontNormal = font.Font(popup, size=24, family='G마켓 산스 TTF Medium')
 
     if server.latitude == 0 and server.longitude == 0:
         emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.", font=fontNormal)
@@ -30,17 +37,17 @@ def onMapPopup():
         marker_1 = map_widget.set_position(server.latitude, server.longitude, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
         marker_1.set_text(server.hospital_name) # set new text
 
-        global addressLabel
+        global addressLabel, InputButton, HospitalButton, SatButton
         addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
         addressLabel.place(x=0, y=550, width=650, height=50)
 
-        InputButton = Button(popup, font=fontNormal, text='검색', command=onSearch)
+        InputButton = Button(popup, font=fontNormal, image=searchImage, command=onSearch, bg = "white")
         InputButton.place(x=650, y=550, width=50, height=50)   
 
-        HospitalButton = Button(popup, font=fontNormal, text='병원', command=onHospital)
+        HospitalButton = Button(popup, font=fontNormal, image=hospitalImage, command=onHospital, bg="white")
         HospitalButton.place(x=700, y=550, width=50, height=50)   
 
-        SatButton = Button(popup, font=fontNormal, text='병원', command=onSat)
+        SatButton = Button(popup, font=fontNormal, command=onSat, image=satelliteImage, bg="white")
         SatButton.place(x=750, y=550, width=50, height=50)  
 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
@@ -57,12 +64,22 @@ def onSearch():
     map_widget.set_zoom(15)
 
 def onHospital():
-    map_widget.set_position(server.latitude, server.longitude)
+    map_widget.set_zoom(15)
+    map_widget.set_position(marker_1.position[0], marker_1.position[1])
 
 def onSat():
-    map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)  # google satellite
-    map_widget.set_zoom(16)
-
+    global isSatellite
+    if isSatellite:
+        isSatellite = False
+        map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)  # google satellite
+        map_widget.set_zoom(16)
+        SatButton.configure(image=normalImage)
+    else:
+        isSatellite = True
+        map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22) 
+        map_widget.set_zoom(15)
+        SatButton.configure(image=satelliteImage)
+    
 def add_marker_event(coords):
     print("Add marker:", coords)
     new_marker = map_widget.set_marker(coords[0], coords[1], text="new marker")

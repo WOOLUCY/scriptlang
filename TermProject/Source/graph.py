@@ -27,7 +27,7 @@ def onGraphPopup():
 
 
 def drawGraph(canvas, data, canvasWidth, canvasHeight):
-    fontLittle = font.Font(popup, size=8, family='나눔바른고딕') 
+    fontLittle = font.Font(popup, size=7, family='G마켓 산스 TTF Medium') 
 
     canvas.delete("grim") # 기존 그림 지우기
     if not len(data): # 데이터 없으면 return
@@ -117,7 +117,7 @@ def onMapPopup(city):
     map_popup.geometry("800x600+100+100")
     map_popup.title("<" + city + "> 내 병원")
 
-    fontNormal = font.Font(map_popup, size=24, family='나눔바른고딕')
+    fontNormal = font.Font(map_popup, size=24, family='G마켓 산스 TTF Medium')
 
     global map_widget
     map_widget = tkintermapview.TkinterMapView(map_popup, width=800, height=600, corner_radius=0) 

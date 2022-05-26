@@ -8,12 +8,13 @@ from mail import *
 import server
 from graph import *
 from map import *
+from server import window
 
-window = Tk()
-window.title("Where the Hospital")
-window.geometry("800x600+450+200")
-window.resizable(False, False)
-window.configure(bg='white')
+# window = Tk()
+# window.title("Where the Hospital")
+# window.geometry("800x600+450+200")
+# window.resizable(False, False)
+# window.configure(bg='white')
 
 searchImage = PhotoImage(file='image/search.png')       # search image
 filterImage = PhotoImage(file='image/filter_icon.png')      # filter image
@@ -23,11 +24,13 @@ linkImage = PhotoImage(file='image/link.png')               # link image
 telegramImage = PhotoImage(file='image/telegram_icon.png')  # link image
 logoImage = PhotoImage(file='image/logo.gif')               # logo image
 graphImage = PhotoImage(file='image/trend.png')             # graph image
+noImage = PhotoImage(file='image/close.png')                # no image
 
 def InitScreen():
-    fontNormal = font.Font(window, size=15, family='나눔바른고딕')
-    fontInfo = font.Font(window, size=10, family='나눔바른고딕')
-    fontLittle = font.Font(window, size=8, family='나눔바른고딕')   
+    fontNormal = font.Font(window, size=14, family='G마켓 산스 TTF Medium')
+    fontLabel= font.Font(window, size=14, family='G마켓 산스 TTF Bold')
+    fontInfo = font.Font(window, size=10, family='G마켓 산스 TTF Medium')
+    fontList = font.Font(window, size=14, family='G마켓 산스 TTF Medium')   
 
     # 시(군) 선택 부분
     global CityListBox, clist
@@ -77,8 +80,8 @@ def InitScreen():
     # 목록 부분
     global listBox
     ListScrollBar = Scrollbar(window)
-    listBox = Listbox(window, selectmode='extended', font=fontNormal, width=10, height=15, \
-        borderwidth=12, relief='ridge', yscrollcommand=ListScrollBar.set)
+    listBox = Listbox(window, selectmode='extended', font=fontList, width=10, height=15, \
+        borderwidth=5, relief='ridge', yscrollcommand=ListScrollBar.set)
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.place(x = 10, y = 250, width=380 - 10, height=340)
 
@@ -87,9 +90,9 @@ def InitScreen():
 
     # 분류 제목 부분
     global CityLabel, TypeLabel, DeptLabel
-    CityLabel = Label(window, text="시(군) 선택", font=fontNormal, bg="#bebebe")
-    DeptLabel = Label(window, text="진료 과목", font=fontNormal, bg="#bebebe")
-    SearchLabel = Label(window, text="검색명", font=fontNormal, bg="#bebebe")
+    CityLabel = Label(window, text="시(군) 선택", font=fontLabel, bg="#bebebe")
+    DeptLabel = Label(window, text="진료 과목", font=fontLabel, bg="#bebebe")
+    SearchLabel = Label(window, text="병원명", font=fontLabel, bg="#bebebe")
 
     CityLabel.place(x=10, y=10, width=100, height=70)
     DeptLabel.place(x=10, y=90, width=100, height=70)
@@ -97,33 +100,33 @@ def InitScreen():
 
     # 로고 부분
     global LogoLabel
-    LogoLable = Label(window, image=logoImage, bg="white")
+    LogoLable = Button(window, image=logoImage, bg="white", command=onLogo, relief="flat")
     LogoLable.place(x=410, y=10, width=380, height=70)
 
     # 그래프 부분
     global GraphButton
     GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup)
-    GraphButton.place(x=410, y=470 + 48, width=72, height=72)
+    GraphButton.place(x=410, y=170, width=72, height=72)
     
     # 메일 부분
     global MailButton
     MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup)
-    MailButton.place(x=410 + 76, y=470 + 48, width=72, height=72)
+    MailButton.place(x=410 + 76, y=170, width=72, height=72)
 
     # 지도 부분
     global MapButton
     MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup)
-    MapButton.place(x=410 + 76 * 2, y=470+ 48, width=72, height=72)   
+    MapButton.place(x=410 + 76 * 2, y=170, width=72, height=72)   
 
     # 링크 부분
     global LinkButton
     LinkButton = Button(window, image=linkImage, bg="white", command=onLink)
-    LinkButton.place(x=410 + 76 * 3, y=470+ 48, width=72, height=72)
+    LinkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
 
     # 텔레그램 부분
     global TelegramButton
     TelegramButton = Button(window, image=telegramImage, bg="white")
-    TelegramButton.place(x=410 + 76 * 4, y=470+ 48, width=72, height=72)   
+    TelegramButton.place(x=410 + 76 * 4, y=170, width=72, height=72)   
 
     # 정보 부분
     global InfoLabel, ST
@@ -132,7 +135,7 @@ def InitScreen():
     # InfoLabel.place(x = 410, y= 220, width=380, height=370)
 
     ST = st.ScrolledText(window, font=fontInfo)
-    ST.place(x = 410, y= 170, width=380, height=370 + 48 - 80)
+    ST.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
 
 def setCity(event):
     global selectedCity, CityListBox, clist, ResetButton
@@ -164,6 +167,7 @@ def resetFilter():
 def event_for_listbox(event):
     global InfoLabel, ST
     selection = event.widget.curselection()
+
     if selection:
         index = selection[0]
         data = event.widget.get(index)
@@ -193,10 +197,13 @@ def event_for_listbox(event):
                 
                 if item.find('REFINE_WGS84_LAT').text == None and item.find('REFINE_WGS84_LOGT').text == None:
                     server.latitude = 0.0
-                    server.longitude = 0.0                  
+                    server.longitude = 0.0    
+                    MapButton.configure(image=noImage)
+                                    
                 else:
                     server.latitude = float(item.find('REFINE_WGS84_LAT').text)
                     server.longitude = float(item.find('REFINE_WGS84_LOGT').text)
+                    MapButton.configure(image=mapImage)  
                 
                 # print(server.latitude, server.longitude)
 
@@ -224,6 +231,10 @@ def onSearch():     # '검색' 버튼 이벤트 처리
 
     SearchHospital(clist[cIdx], dlist[dIdx])
     # print(cSearchIndex, dSearchIndex)
+
+def onLogo():
+    url = 'https://github.com/WOOLUCY/scriptlang/tree/main/TermProject'
+    webbrowser.open(url)
 
 def onLink():
     url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + server.hospital_name

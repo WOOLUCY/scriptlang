@@ -1,3 +1,11 @@
+from tkinter import *
+
+window = Tk()
+window.title("어디병원")
+window.geometry("800x600+450+200")
+window.resizable(False, False)
+window.configure(bg='white')
+
 # datas
 info_text = None
 hospital_name = None
@@ -28,6 +36,7 @@ mail_list = []
 
 mouse_x = 0
 mouse_y = 0
+
 
 if __name__ == '__main__':
     print("\nserver.py runned\n")
