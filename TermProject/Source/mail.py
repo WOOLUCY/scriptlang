@@ -168,6 +168,6 @@ def getStr(s):
 
 if __name__ == '__main__':
     onEmailPopup()
-    print("\npop_up.py runned\n")
+    print("pop_up.py runned\n")
 else:
-    print("\npop_up.py imported\n")
+    print("pop_up.py imported\n")

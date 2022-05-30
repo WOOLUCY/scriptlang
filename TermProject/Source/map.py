@@ -88,3 +88,7 @@ def add_marker_event(coords):
     new_marker = map_widget.set_marker(coords[0], coords[1], text="new marker")
     map_widget.set_path([coords, marker_1.position])
     
+if __name__ == '__main__':
+    print("map.py runned\n")
+else:
+    print("map.py imported\n")

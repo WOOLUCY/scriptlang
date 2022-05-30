@@ -35,6 +35,6 @@ mouse_y = 0
 
 
 if __name__ == '__main__':
-    print("\nserver.py runned\n")
+    print("server.py runned\n")
 else:
-    print("\nserver.py imported\n")
+    print("server.py imported\n")
