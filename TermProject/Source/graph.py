@@ -94,12 +94,9 @@ def getData():
 
     elements = parseData.iter('row')
     for item in elements:   # 'row' element들
-        # if item.find('SIGUN_NM').text in hList
         for i, city in enumerate(server.city_list):
             if item.find('SIGUN_NM').text == city:
                 server.hList[i] += 1           
-    # for i, city in enumerate(server.hList):
-    #     print(server.city_list[i], city)
 
 def mouseClicked(event):
     server.mouse_x= event.x
@@ -131,7 +128,6 @@ def onMapPopup(city):
 
     elements = parseData.iter('row')
     for item in elements:   # 'row' element들
-        # if item.find('SIGUN_NM').text in hList
         if item.find('SIGUN_NM').text == city and getStr(item.find('REFINE_WGS84_LAT').text) != '정보없음' and getStr(item.find('REFINE_WGS84_LOGT').text) != '정보없음':
             # 주소 위치지정 
             lat = float(item.find('REFINE_WGS84_LAT').text)
@@ -140,7 +136,7 @@ def onMapPopup(city):
                 marker=True, marker_color_outside="grey", marker_color_circle="white") # 위도,경도 위치지정
             marker_1.set_text(item.find('BIZPLC_NM').text) # set new text
 
-            map_widget.set_zoom(13)
+            map_widget.set_zoom(12)
 
 def getStr(s):
     return '정보없음' if not s else s

@@ -1,7 +1,4 @@
 # === import ===
-# from ctypes import addressof
-# from msilib.schema import ListBox
-# from cProfile import label
 from server import window
 from tkinter import *
 from tkinter import font
@@ -213,14 +210,7 @@ def onSearch():     # command for search button
     cIdx = selectedCity[0]
     dIdx = selectedDept[0]
 
-    # selC = CityListBox.curselection()
-    # cSearchIndex = 0 if len(selC) == 0 else CityListBox.curselection()[0]
-    
-    # selD = DeptListBox.curselection()
-    # dSearchIndex = 0 if len(selD) == 0 else DeptListBox.curselection()[0]
-
     SearchHospital(clist[cIdx], dlist[dIdx])
-    # print(cSearchIndex, dSearchIndex)
 
 def onLogo():   # command for logo button
     url = 'https://github.com/WOOLUCY/scriptlang/tree/main/TermProject'

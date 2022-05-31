@@ -16,10 +16,7 @@ def onMapPopup():
     popup = Toplevel()
     popup.geometry("800x600+100+100")
     popup.title("<" + server.hospital_name + "> 의 지도")
-
-    # root = Tk()
-    # root.geometry(f"{800}x{600}")
-    # root.title("map_view_example.py")
+    
     fontNormal = font.Font(popup, size=18, family='G마켓 산스 TTF Medium')
 
     if server.latitude == 0 and server.longitude == 0:

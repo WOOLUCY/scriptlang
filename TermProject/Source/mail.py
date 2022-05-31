@@ -138,13 +138,6 @@ def onEmailPopup():
     btnEmail.place(x=10,y = 195, width = 280, height= 30)
 
 
-    # inputEmail = Entry(popup, width = 200, font=fontNormal)
-    # inputEmail.pack(fill='x', padx=10, expand=True)
-
-    # btnEmail = Button(popup, text="확인", command=onEmailInput, font=fontNormal)
-    # btnEmail.pack(anchor="s", padx=10, pady=10)
-
-
 def sendMail(fromAddr, toAddr, msg):
     import smtplib # 파이썬의 SMTP 모듈
     # 메일 서버와 connect하고 통신 시작
