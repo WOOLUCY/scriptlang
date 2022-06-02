@@ -33,7 +33,6 @@ mail_list = []
 mouse_x = 0
 mouse_y = 0
 
-
 if __name__ == '__main__':
     print("server.py runned\n")
 else:

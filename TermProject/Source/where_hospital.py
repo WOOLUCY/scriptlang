@@ -34,7 +34,7 @@ def InitScreen():
 
     # 분류 제목 레이블 부분
     global CityLabel, NameLabel, DeptLabel
-    CityLabel = Label(window, text="시(군) 선택", font=fontLabel, bg = "white", image=labelImage, compound='center')
+    CityLabel = Label(window, text="시/군", font=fontLabel, bg = "white", image=labelImage, compound='center')
     DeptLabel = Label(window, text="진료 과목", font=fontLabel, bg = "white", image=labelImage, compound='center')
     NameLabel = Label(window, text="병원명", font=fontLabel, bg = "white", image=labelImage, compound='center')
 
@@ -271,5 +271,9 @@ def SearchHospital(city = '', dept = ''):
             i = i + 1
 
 # === main ====
-InitScreen()
-window.mainloop()
+if __name__ == '__main__':
+    print("laucher runned\n")
+    InitScreen()
+    window.mainloop()
+else:
+    print("launcher imported\n")

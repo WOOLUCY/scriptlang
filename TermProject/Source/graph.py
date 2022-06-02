@@ -1,13 +1,8 @@
-from gc import callbacks
-from http.client import CannotSendHeader
-from msilib import sequence
 from tkinter import *
 import tkintermapview
-
-from click import command
-from numpy import insert 
-import server
 from tkinter import font
+
+import server
 
 def onGraphPopup(): 
     global popup
@@ -74,17 +69,6 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
     leftList.append(1178)
 
-
-
-def clicked(*args):
-    global leftList
-    print(server.mouse_x, server.mouse_y)
-    print("hello")
-    
-
-def getCity():
-    print("hello")
-
 def getData():
     # 클릭 시, 정보 출력
     from xml.etree import ElementTree
@@ -106,7 +90,6 @@ def mouseClicked(event):
             if ( topList[i] < server.mouse_y):
                 print(server.city_list[i+1])
                 onMapPopup(server.city_list[i+1])
-
 
 def onMapPopup(city):
     global map_popup

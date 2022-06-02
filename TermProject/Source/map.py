@@ -5,10 +5,10 @@ from tkinter import font
 
 isSatellite = True
 
-satelliteImage = PhotoImage(file='image/satellite.png')             # satellite image
-normalImage = PhotoImage(file='image/normal_map.png')               # map image
+satelliteImage = PhotoImage(file='image/satellite.png')             # satellite map image
+normalImage = PhotoImage(file='image/normal_map.png')               # normal map image
 hospitalImage = PhotoImage(file='image/hospital.png')               # hospital image
-searchImage = PhotoImage(file='image/little_search.png')               # hospital image
+searchImage = PhotoImage(file='image/little_search.png')            # search hospital image
 
 def onMapPopup():
     if server.hospital_name == None: return
