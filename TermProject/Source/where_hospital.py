@@ -277,3 +277,8 @@ if __name__ == '__main__':
     window.mainloop()
 else:
     print("launcher imported\n")
+    info_text = None
+hospital_name = None
+
+latitude = 0.0      # 위도
+longitude = 0.0     # 경도
