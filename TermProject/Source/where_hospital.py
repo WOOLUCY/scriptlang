@@ -1,9 +1,11 @@
 # === import ===
+from tkinter.tix import NoteBook
 from server import window
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
 import webbrowser
+from tkinter import ttk
 
 from mail import *
 import server
@@ -129,10 +131,26 @@ def InitScreen():
     TelegramButton.place(x=410 + 76 * 4, y=170, width=72, height=72)   
 
     # 정보 부분
-    global InfoLabel, ST
+    global InfoLabel, ST, notebook
+    notebook = ttk.Notebook(window)
+    notebook.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
 
+    # notebook page1
     ST = st.ScrolledText(window, font=fontInfo, cursor="arrow")
-    ST.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
+    notebook.add(ST, text="Info")
+
+    # notebook page2
+    frame2 = Frame(window)
+    notebook.add(frame2, text="Search") 
+    entry = Entry(frame2)   
+    entry.pack()
+    label2 = Label(frame2, text = "검색결과")
+    label2.pack()
+
+    # notebook page3
+    label2 = Label(text = "아무 내용이나")
+    notebook.add(label2, text="Memo")        
+
 
 def setCity(event): # command for city list box
     global selectedCity, CityListBox, clist, ResetButton
