@@ -262,31 +262,34 @@ def SearchHospital(city = '', dept = ''):
             continue
         
         # 시군 O, 과목 O
-        if item.find('SIGUN_NM').text == city and dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text) and item.find('BSN_STATE_NM') != "폐업":
+        if item.find('SIGUN_NM').text == city and dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text):
             _text = getStr(item.find('BIZPLC_NM').text) 
             
             listBox.insert(i-1, _text)
             i = i + 1
 
         # 시군 O, 과목 X 
-        elif item.find('SIGUN_NM').text == city and dept == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
+        elif item.find('SIGUN_NM').text == city and dept == "선택안함":
             _text = getStr(item.find('BIZPLC_NM').text) 
             
             listBox.insert(i-1, _text)
             i = i + 1
 
         # 시군 X, 과목 O
-        elif dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text) and city == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
+        elif dept in getStr(item.find('TREAT_SBJECT_CONT_INFO').text) and city == "선택안함":
             _text = getStr(item.find('BIZPLC_NM').text) 
             
             listBox.insert(i-1, _text)
             i = i + 1        
         
-        elif city == "선택안함" and dept == "선택안함" and item.find('BSN_STATE_NM') != "폐업":
+        elif city == "선택안함" and dept == "선택안함":
             _text = getStr(item.find('BIZPLC_NM').text)
             
             listBox.insert(i-1, _text)
             i = i + 1
+
+        if item.find('BIZPLC_NM').text == '의료법인대성의료재단 한림예요양병원':
+            print(i)
 
 # === main ====
 if __name__ == '__main__':
