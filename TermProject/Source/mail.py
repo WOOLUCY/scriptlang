@@ -159,6 +159,11 @@ def event_for_mailListbox(event):
 def getStr(s):
     return '정보없음' if not s else s
 
+   htmlFD = open("logo.html", 'rb')
+    HtmlPart = MIMEText(htmlFD.read(),'html', _charset = 'UTF-8' )
+    htmlFD.close()
+
+
 if __name__ == '__main__':
     onEmailPopup()
     print("mail.py runned\n")
