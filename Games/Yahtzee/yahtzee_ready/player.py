@@ -1,4 +1,3 @@
-
 class Player:
     UPPER = 6
     LOWER = 7
