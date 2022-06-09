@@ -6,11 +6,11 @@ from configuration import *
 from tkinter import messagebox
 
 # TODO: 예외처리
-# 1번도 roll 하지 않았을 때는 카테고리 선택 금지
-# 이미 선택한 카테고리는 다시 선택 금지
+# 1번도 roll 하지 않았을 때는 카테고리 선택 금지 (O)
+# 이미 선택한 카테고리는 다시 선택 금지 (O)
 # Roll은 최대 3번까지만 가능 (O)
 # Roll 후에 고정시킨 주사위는 차례가 바뀔 때까지 고정이 풀리지 말아야 함 (O)
-# roll 전에 주사위 고정 막기
+# Roll 전에 주사위 고정 막기 (O)
 
 class YahtzeeBoard:
     # index들.
@@ -30,6 +30,8 @@ class YahtzeeBoard:
     player = 0      # players 리스트에서 현재 플레이어의 index.
     round = 0       # 13 라운드 중 몇번째인지 (0~12 사이의 값을 가짐)
     roll = 0        # 각 라운드에서 3번 중 몇번째 굴리기인지 (0~2 사이의 값을 가짐)
+
+    select = False
 
     # 색깔
     color_btn_bg = 'SystemButtonFace'
@@ -113,7 +115,7 @@ class YahtzeeBoard:
         self.window.mainloop()
 
     # 주사위 굴리기 함수.
-    def rollDiceListener(self):
+    def rollDiceListener(self):     
         # 'state' 값이 'disabled'가 아닌 모든 주사위 값을 새로 할당하고 화면에 표시.
         # TODO
         for i in range(5):
@@ -130,16 +132,34 @@ class YahtzeeBoard:
             self.bottomLabel.configure(text="카테고리를 선택하세요")
             self.rollDice['state'] = 'disabled'
             self.rollDice['bg'] = 'light gray'
-            self.roll = 0
+
+            if self.select == True:
+                self.roll = 0
+                self.select = False
 
     # 각 주사위에 해당되는 버튼 클릭 : disable 시키고 배경색을 어둡게 바꿔 표현해 주기.
     def diceListener(self, row):
+        # Roll 전에 주사위 고정 막기
+        if self.roll == 0:   
+            self.bottomLabel.configure(text="주사위를 먼저 굴려주세요")
+            return 0   
+
         self.diceButtons[row]['state'] = 'disabled'
         self.diceButtons[row]['bg'] = 'light gray'
 
     # 카레고리 버튼 눌렀을 때의 처리.
     #   row: 0~5, 8~14
     def categoryListener(self, row):
+        # 1번도 roll 하지 않았을 때는 카테고리 선택 금지
+        if self.roll == 0 and self.select == False:   
+            self.bottomLabel.configure(text="주사위를 먼저 굴려주세요")
+            return 0
+        
+        # 이미 선택한 카테고리는 다시 선택 금지
+        if self.fields[row][self.player]['text'] != '':
+            self.bottomLabel.configure(text="선택한 항목은 다시 선택할 수 없습니다")
+            return 0
+
         score = Configuration.score(row, self.dice)      #점수 계산
         # index : 0~12
         index = row
@@ -153,7 +173,7 @@ class YahtzeeBoard:
         self.players[self.player].setAtUsed(index)
         self.fields[row][self.player].configure(text=str(score))
         self.fields[row][self.player]['state'] = 'disabled'
-        self.fields[row][self.player]['bg'] = 'light gray'        
+        self.fields[row][self.player]['bg'] = 'light gray'   
         
         # UPPER category가 전부 사용되었으면 UpperScore, UpperBonus 계산
         # TODO: 구현
@@ -189,18 +209,18 @@ class YahtzeeBoard:
                         or (i-1) == self.LOWERTOTAL or (i-1) == self.TOTAL):
                         self.fields[i-1][j]['state'] = 'disabled'
                         self.fields[i-1][j]['bg'] = 'light gray'
-                else:
-                    self.fields[i-1][self.player]['state'] = 'active'
+                else:          
+                    self.fields[i-1][self.player]['state'] = 'normal'
                     self.fields[i-1][self.player]['bg'] = 'SystemButtonFace'
+           
 
         # 라운드 증가 시키기.
         if self.player == 0:
             self.round += 1
+            print(self.round)
 
         # 게임이 종료되었는지 검사 -> 이긴 사람을 알리고 새 게임 시작.
         # TODO: 구현
-        if (self.player == 0):
-            self.round += 1
         if (self.round == 13): # 게임 종료
             totalscores = []
             for i in range(self.numPlayers):
@@ -216,7 +236,7 @@ class YahtzeeBoard:
             self.round = 0
             self.roll= 0
             self.window.destroy()
-            self.InitPlayers()        
+            self.InitGame()        
 
         # 다시 Roll Dice 버튼과 diceButtons 버튼들을 활성화.
         self.rollDice.configure(text="Roll Dice")
@@ -229,7 +249,6 @@ class YahtzeeBoard:
             self.diceButtons[i]['bg'] = self.color_btn_bg
 
         # bottomLabel 초기화.
-        #
         self.roll = 0
         self.bottomLabel.configure(text=cur_player.toString()+ "차례: Roll Dice 버튼을 누르세요")
 

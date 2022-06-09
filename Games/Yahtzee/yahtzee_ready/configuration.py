@@ -23,8 +23,12 @@ class Configuration:
         if (row >=0 and row <= 6): # Ones ~ Upper Scores
             return Configuration.scoreUpper(dices, row+1)
         elif (row == 8): # Three of a kind
+            if Configuration.scoreThreeOfAKind(dices) == None:
+                return 0
             return Configuration.scoreThreeOfAKind(dices)
         elif (row == 9): # Four of a kind
+            if Configuration.scoreFourOfAKind(dices) == None:
+                return 0
             return Configuration.scoreFourOfAKind(dices)
         elif (row == 10): # Full House(25)
             return Configuration.scoreFullHouse(dices)
@@ -58,6 +62,7 @@ class Configuration:
             if dices[i].getRoll() == dices[i+1].getRoll() and dices[i].getRoll() == dices[i+2].getRoll() and dices[i].getRoll() == dices[i+3].getRoll():
                 return Configuration.sumDie(dices)
 
+
     def scoreFullHouse(dices):
         dices.sort(key=lambda i : i.getRoll())
         if dices[0].getRoll() == dices[1].getRoll() and\
@@ -66,6 +71,7 @@ class Configuration:
         elif dices[0].getRoll() == dices[1].getRoll() and dices[0].getRoll() == dices[2].getRoll() and\
                 dices[3].getRoll() == dices[4].getRoll():
             return 25
+        else: return 0
 
     def scoreSmallStraight(dices):
         # 1 2 3 4 혹은 2 3 4 5 혹은 3 4 5 6 검사
