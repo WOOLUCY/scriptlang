@@ -9,7 +9,7 @@ import tkinter.scrolledtext as st
 from tkinter.ttk import Notebook, Style
 from xml.etree import ElementTree
 
-from mail import *
+from gmail_send import *
 import server
 from graph import *
 from map import *
