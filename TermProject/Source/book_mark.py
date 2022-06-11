@@ -1,5 +1,4 @@
 import pickle
-
 from click import command
 import server
 import tkinter.messagebox as msgbox
@@ -7,6 +6,8 @@ import os
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
+
+selHospital = None
 
 def onMarkPopup():
     global popup
@@ -46,19 +47,43 @@ def onMarkPopup():
     # 진료 과목 내용 정보
     global ST
     ST = st.ScrolledText(popup, font=fontInfo, cursor="arrow")
-    ST.place(x = 390 + 20, y = 0, width=380, height=340)
+    ST.place(x = 390 + 20, y = 0, width=385, height=340)
 
+    # 병원 삭제 버튼
     global deleteButton
-    deleteButton = Button(popup, font=fontList, text='북마크에서 해당 병원 제외하기')
+    deleteButton = Button(popup, font=fontList, text='북마크에서 해당 병원 제외하기', command=deleteHospital)
     deleteButton.place(x = 0, y = 340, width=800, height=30)
 
-def showInfo(event):   # command for list box
-    global InfoLabel, ST
-    selection = event.widget.curselection()
+def deleteHospital():
+    global ST
+    if len(server.MarkDict) == 0:
+        msgbox.showinfo("알림", "북마크가 비어있습니다.")  
+        popup.focus_set()
+    else: 
+        if selHospital in server.MarkDict:
+            del server.MarkDict[selHospital]
+                      
+            idx = 0
+            for i, key in enumerate(server.MarkDict.items()):
+                idx += 1
+                if key == selHospital[1]:
+                    break    
+            print(idx)           
+                
+            listBox.delete(idx) 
 
+            f = open('mark', 'wb') #pickle 사용을 위해 바이너리 쓰기 파일 오픈
+            pickle.dump(server.MarkDict, f) #리스트 객체를 파일로 dump
+            f.close()
+            ST.delete('1.0', END)
+
+def showInfo(event):   # command for list box
+    global InfoLabel, ST, selHospital
+    selection = event.widget.curselection()
     if selection:
         index = selection[0]
         data = event.widget.get(index)
+        selHospital = data
 
         if data in server.MarkDict:
             info = server.MarkDict[data]
@@ -71,7 +96,7 @@ def showInfo(event):   # command for list box
 def makeBookMark():
     if server.hospital_name:
         if server.hospital_name in server.MarkDict:
-         msgbox.showinfo("알림", "이미 북마크에 추가한 병원입니다.")          
+            msgbox.showinfo("알림", "이미 북마크에 추가한 병원입니다.")          
 
         else:
             text = server.info_text + '\n\n' + '[MEMO]' + '\n' + server.memo_text

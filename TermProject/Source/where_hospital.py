@@ -282,7 +282,6 @@ def getStr(s):  # utitlity function: 문자열 내용 있을 때만 사용
     return '정보없음' if not s else s
 
 def SearchHospital(city = '', dept = ''): 
-
     global listBox
     listBox.delete(0, listBox.size())
 
