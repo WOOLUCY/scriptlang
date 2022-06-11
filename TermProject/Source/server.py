@@ -9,6 +9,8 @@ window.configure(bg='white')
 # datas
 info_text = None
 hospital_name = None
+memo_text = None
+MarkDict = dict()
 
 latitude = 0.0      # 위도
 longitude = 0.0     # 경도

@@ -15,13 +15,15 @@ from graph import *
 from map import *
 from telegram import *
 from link import *
+from book_mark import *
 
 # === load image ===
 searchImage = PhotoImage(file='image/search.png')               # search image
 filterImage = PhotoImage(file='image/filter_icon.png')          # filter image
 emailImage = PhotoImage(file='image/mail_icon3.png')            # mail image
 mapImage = PhotoImage(file='image/map_icon2.png')               # map image
-linkImage = PhotoImage(file='image/link.png')                   # link image
+emptymarkImage = PhotoImage(file='image/white_bookmark.png')    # mark image
+markImage = PhotoImage(file='image/bookmark.png')    # mark image
 telegramImage = PhotoImage(file='image/telegram_icon.png')      # telegram image
 logoImage = PhotoImage(file='image/logo.gif')                   # logo image
 graphImage = PhotoImage(file='image/trend.png')                 # graph image
@@ -29,7 +31,7 @@ noImage = PhotoImage(file='image/close.png')                    # no image
 labelImage = PhotoImage(file='image/label.png')                 # label image
 googleLinkImage = PhotoImage(file='image/google.png')           # label image
 naverImage = PhotoImage(file='image/naver.png')                 # label image
-naverMapImage = PhotoImage(file='image/google_map.png')           # label image
+naverMapImage = PhotoImage(file='image/google_map.png')         # label image
 
 # === load font ===
 fontNormal = font.Font(window, size=14, family='G마켓 산스 TTF Medium')
@@ -127,10 +129,10 @@ def InitScreen():
     MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     MapButton.place(x=410 + 76 * 2, y=170, width=72, height=72)   
 
-    # 링크버튼 부분
-    global LinkButton
-    LinkButton = Button(window, image=linkImage, bg="white", command=onNaverLink, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
-    LinkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
+    # 북마크버튼 부분
+    global MarkButton
+    MarkButton = Button(window, image=emptymarkImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=onMarkPopup)
+    MarkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
 
     # 텔레그램버튼 부분
     global TelegramButton
@@ -163,9 +165,32 @@ def InitScreen():
     link3.pack(pady=20)
 
     # notebook page3
-    label2 = Label(text = "아무 내용이나")
-    notebook.add(label2, text="Memo")        
+    global memoST
+    frame3 = Frame(window, background='white')
+    memoST = st.ScrolledText(frame3, relief='raised', font=fontInfo)
+    memoST.place(x=0, y=0, width=380, height=288)
+    memoButton = Button(frame3, text='북마크 저장', command=saveMemo,font=fontInfo)
+    memoButton.place(x=0, y=288, width=380, height=30)
+    notebook.add(frame3, text="Memo")  
 
+    # bookmark data load
+    dirpath = os.getcwd()
+    if os.path.isfile(dirpath + '\mark'):            
+        f = open('mark', 'rb')
+        dic = pickle.load(f) #파일에서 리스트 load
+        f.close()
+        server.MarkDict = dic
+
+def saveMemo():
+    if server.hospital_name:
+        server.memo_text = memoST.get("1.0", END)
+        # print (server.memo_text)
+        memoST.delete('1.0', END)
+        makeBookMark()
+
+
+    else:
+        msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")      
 
 def setCity(event): # command for city list box
     global selectedCity, CityListBox, clist, ResetButton
@@ -229,6 +254,11 @@ def event_for_listbox(event):   # command for list box
                     server.latitude = float(item.find('REFINE_WGS84_LAT').text)
                     server.longitude = float(item.find('REFINE_WGS84_LOGT').text)
                     MapButton.configure(image=mapImage)  
+        
+        if data in server.MarkDict:
+            MarkButton.configure(image=markImage)
+        else:
+            MarkButton.configure(image=emptymarkImage)
 
         server.info_text = info
 
