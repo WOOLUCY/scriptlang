@@ -1,18 +1,20 @@
 # === import ===
 from tkinter.tix import NoteBook
+from turtle import bgcolor
 from urllib.request import urlopen
 from server import window
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
-import webbrowser
-from tkinter import ttk
+from tkinter.ttk import Notebook, Style
 from xml.etree import ElementTree
 
 from mail import *
 import server
 from graph import *
 from map import *
+from telegram import *
+from link import *
 
 # === load image ===
 searchImage = PhotoImage(file='image/search.png')               # search image
@@ -25,6 +27,9 @@ logoImage = PhotoImage(file='image/logo.gif')                   # logo image
 graphImage = PhotoImage(file='image/trend.png')                 # graph image
 noImage = PhotoImage(file='image/close.png')                    # no image
 labelImage = PhotoImage(file='image/label.png')                 # label image
+googleLinkImage = PhotoImage(file='image/google.png')           # label image
+naverImage = PhotoImage(file='image/naver.png')                 # label image
+naverMapImage = PhotoImage(file='image/google_map.png')           # label image
 
 # === load font ===
 fontNormal = font.Font(window, size=14, family='G마켓 산스 TTF Medium')
@@ -124,17 +129,22 @@ def InitScreen():
 
     # 링크버튼 부분
     global LinkButton
-    LinkButton = Button(window, image=linkImage, bg="white", command=onLink, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
+    LinkButton = Button(window, image=linkImage, bg="white", command=onNaverLink, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     LinkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
 
     # 텔레그램버튼 부분
     global TelegramButton
-    TelegramButton = Button(window, image=telegramImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken")
+    TelegramButton = Button(window, image=telegramImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=sendSelectedInfo)
     TelegramButton.place(x=410 + 76 * 4, y=170, width=72, height=72)   
 
     # 정보 부분
     global InfoLabel, ST, notebook
-    notebook = ttk.Notebook(window)
+    style = Style()
+    style.theme_use('default')
+    style.configure('TNotebook.Tab', background="gray")
+    style.map("TNotebook", background= [("selected", "gray")])
+
+    notebook = Notebook(window)
     notebook.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
 
     # notebook page1
@@ -142,12 +152,15 @@ def InitScreen():
     notebook.add(ST, text="Info")
 
     # notebook page2
-    frame2 = Frame(window)
-    notebook.add(frame2, text="Search") 
-    entry = Entry(frame2)   
-    entry.pack()
-    label2 = Label(frame2, text = "검색결과")
-    label2.pack()
+    frame2 = Frame(window, background='white')
+    notebook.add(frame2, text="Link") 
+    link1 = Button(frame2, image=googleLinkImage, bg='white', relief="flat", command=onGoogleLink)
+    link2 = Button(frame2, image=naverImage, bg='white', relief="flat", command=onNaverLink)
+    link3 = Button(frame2, image=naverMapImage, bg='white', relief="flat", command=onNaverMapLink)
+
+    link1.pack(pady=20)
+    link2.pack(pady=20)
+    link3.pack(pady=20)
 
     # notebook page3
     label2 = Label(text = "아무 내용이나")
@@ -234,14 +247,6 @@ def onSearch():     # command for search button
 
     SearchHospital(clist[cIdx], dlist[dIdx])
 
-def onLogo():   # command for logo button
-    url = 'https://github.com/WOOLUCY/scriptlang/tree/main/TermProject'
-    webbrowser.open(url)
-
-def onLink():   # command for link button
-    if server.hospital_name:
-        url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=' + server.hospital_name
-        webbrowser.open(url)
 
 def getStr(s):  # utitlity function: 문자열 내용 있을 때만 사용
     return '정보없음' if not s else s
