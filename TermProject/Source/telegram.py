@@ -8,4 +8,3 @@ def sendSelectedInfo():
         return
     bot = telepot.Bot("5441441415:AAEolADNSY5sQlqcWJQCddqyQltgdB1hDh4")
     bot.sendMessage('5554103153', server.info_text + '\n\n' + '[검색결과]' + '\n' +'https://www.google.com/search?q=' + server.hospital_name)
-
