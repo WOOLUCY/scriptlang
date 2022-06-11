@@ -154,11 +154,11 @@ def InitScreen():
     notebook.add(ST, text="Info")
 
     # notebook page2
-    frame2 = Frame(window, background='white')
+    frame2 = Frame(window, background='white', relief='flat', borderwidth=0)
     notebook.add(frame2, text="Link") 
-    link1 = Button(frame2, image=googleLinkImage, bg='white', relief="flat", command=onGoogleLink)
-    link2 = Button(frame2, image=naverImage, bg='white', relief="flat", command=onNaverLink)
-    link3 = Button(frame2, image=naverMapImage, bg='white', relief="flat", command=onNaverMapLink)
+    link1 = Button(frame2, image=googleLinkImage, bg='white', relief="flat", command=onGoogleLink, cursor="hand2")
+    link2 = Button(frame2, image=naverImage, bg='white', relief="flat", command=onNaverLink, cursor="hand2")
+    link3 = Button(frame2, image=naverMapImage, bg='white', relief="flat", command=onNaverMapLink, cursor="hand2")
 
     link1.pack(pady=20)
     link2.pack(pady=20)
@@ -166,12 +166,12 @@ def InitScreen():
 
     # notebook page3
     global memoST
-    frame3 = Frame(window, background='white')
+    frame3 = Frame(window, background='white', relief='flat', borderwidth=0)
     memoST = st.ScrolledText(frame3, relief='raised', font=fontInfo)
     memoST.place(x=0, y=0, width=380, height=288)
-    memoButton = Button(frame3, text='북마크 저장', command=saveMemo,font=fontInfo)
+    memoButton = Button(frame3, text='북마크 저장', command=saveMemo,font=fontInfo, cursor="hand2")
     memoButton.place(x=0, y=288, width=380, height=30)
-    notebook.add(frame3, text="Memo")  
+    notebook.add(frame3, text="BookMark")  
 
     # bookmark data load
     dirpath = os.getcwd()

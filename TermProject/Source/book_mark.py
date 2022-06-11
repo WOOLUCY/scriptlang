@@ -13,7 +13,7 @@ def onMarkPopup():
     global popup
     print("graph button clicked")
     popup = Toplevel()
-    popup.geometry("800x600+100+100")
+    popup.geometry("800x370+450+200")
     popup.title("북마크")
     popup.resizable(False, False)
 
@@ -29,14 +29,16 @@ def onMarkPopup():
     dirpath = os.getcwd()
     if os.path.isfile(dirpath + '\mark'):            
         f = open('mark', 'rb')
-        dic = pickle.load(f) #파일에서 리스트 load
+        dic = pickle.load(f) 
         f.close()
         server.MarkDict = dic
 
     print(server.MarkDict.keys())
+    i = 0
     for hospital, info in server.MarkDict.items():
         print(hospital)
-        listBox.insert(0, hospital)
+        listBox.insert(i, hospital)
+        i = i + 1
 
     listBox.bind('<<ListboxSelect>>', showInfo)
     listBox.place(x = 10, y = 0, width=390 - 10, height=340)
@@ -61,19 +63,10 @@ def deleteHospital():
         popup.focus_set()
     else: 
         if selHospital in server.MarkDict:
-            del server.MarkDict[selHospital]
-                      
-            idx = 0
-            for i, key in enumerate(server.MarkDict.items()):
-                idx += 1
-                if key == selHospital[1]:
-                    break    
-            print(idx)           
-                
-            listBox.delete(idx) 
+            del server.MarkDict[selHospital]     
 
-            f = open('mark', 'wb') #pickle 사용을 위해 바이너리 쓰기 파일 오픈
-            pickle.dump(server.MarkDict, f) #리스트 객체를 파일로 dump
+            f = open('mark', 'wb')              
+            pickle.dump(server.MarkDict, f)    
             f.close()
             ST.delete('1.0', END)
 
@@ -105,25 +98,25 @@ def makeBookMark():
 
             if os.path.isfile(dirpath + '\mark'):            
                 f = open('mark', 'rb')
-                server.MarkDict = pickle.load(f) #파일에서 리스트 load
+                server.MarkDict = pickle.load(f)   
                 f.close()
 
                 server.MarkDict[server.hospital_name] = text
 
-                f = open('mark', 'wb') #pickle 사용을 위해 바이너리 쓰기 파일 오픈
-                pickle.dump(server.MarkDict, f) #리스트 객체를 파일로 dump
+                f = open('mark', 'wb')     
+                pickle.dump(server.MarkDict, f) 
                 f.close()
 
-                f = open('mark', 'rb') #pickle 사용을 위해 바이너리 읽기 파일 오픈
-                server.MarkDict = pickle.load(f) #파일에서 리스트 load
+                f = open('mark', 'rb')
+                server.MarkDict = pickle.load(f) 
                 f.close()
 
                 print(server.MarkDict)
 
             else:
                 server.MarkDict[server.hospital_name] = text
-                f = open('mark', 'wb') #pickle 사용을 위해 바이너리 쓰기 파일 오픈
-                pickle.dump(server.MarkDict, f) #리스트 객체를 파일로 dump
+                f = open('mark', 'wb') 
+                pickle.dump(server.MarkDict, f)
                 f.close()
 
                 print(server.MarkDict)

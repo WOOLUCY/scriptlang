@@ -2,6 +2,7 @@ from tkinter import *
 import server
 import tkintermapview
 from tkinter import font
+import tkinter.messagebox as msgbox
 
 isSatellite = True
 
@@ -11,7 +12,9 @@ hospitalImage = PhotoImage(file='image/hospital.png')               # hospital i
 searchImage = PhotoImage(file='image/little_search.png')            # search hospital image
 
 def onMapPopup():
-    if server.hospital_name == None: return
+    if server.hospital_name == None: 
+        msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")
+        return
     global popup
     popup = Toplevel()
     popup.geometry("800x600+100+100")

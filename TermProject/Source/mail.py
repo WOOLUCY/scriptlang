@@ -7,6 +7,7 @@ from msilib.schema import Font # MIMEtexe 생성에 사용
 # from http.client import HTTPSConnection
 # from mimetypes import MimeTypes
 from tkinter import *
+import tkinter.messagebox as msgbox
 
 import server
 from tkinter import font
@@ -98,6 +99,10 @@ def event_for_add():
             
 
 def onEmailPopup(): 
+    if server.hospital_name == None: 
+        msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")
+        return
+
     global addrEmail, popup
     addrEmail = None 
     popup = Toplevel() # popup 띄우기

@@ -1,7 +1,8 @@
 from tkinter import *
 import tkintermapview
 from tkinter import font
-
+from xml.etree import ElementTree
+from urllib.request import urlopen
 import server
 
 def onGraphPopup(): 
@@ -71,12 +72,15 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
 def getData():
     # 클릭 시, 정보 출력
-    from xml.etree import ElementTree
-    with open('경기도병원현황.xml', 'rb') as f:
-        strXml = f.read().decode('utf-8')
-    parseData = ElementTree.fromstring(strXml)
+    key = "8a2e77d6b1a846d1a28fff0ca47f1215"
+    url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
 
-    elements = parseData.iter('row')
+    res_body = urlopen(url).read()
+    strXml = res_body.decode('utf-8')
+    tree = ElementTree.fromstring(strXml)
+
+    elements = tree.iter("row")
+
     for item in elements:   # 'row' element들
         for i, city in enumerate(server.city_list):
             if item.find('SIGUN_NM').text == city:
@@ -104,12 +108,14 @@ def onMapPopup(city):
     map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22) 
     map_widget.place(x=0, y=0, width=800, height=600)
 
-    from xml.etree import ElementTree
-    with open('경기도병원현황.xml', 'rb') as f:
-        strXml = f.read().decode('utf-8')
-    parseData = ElementTree.fromstring(strXml)
+    key = "8a2e77d6b1a846d1a28fff0ca47f1215"
+    url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
 
-    elements = parseData.iter('row')
+    res_body = urlopen(url).read()
+    strXml = res_body.decode('utf-8')
+    tree = ElementTree.fromstring(strXml)
+
+    elements = tree.iter("row")
     for item in elements:   # 'row' element들
         if item.find('SIGUN_NM').text == city and getStr(item.find('REFINE_WGS84_LAT').text) != '정보없음' and getStr(item.find('REFINE_WGS84_LOGT').text) != '정보없음':
             # 주소 위치지정 
