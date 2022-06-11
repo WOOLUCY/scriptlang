@@ -1,11 +1,13 @@
 # === import ===
 from tkinter.tix import NoteBook
+from urllib.request import urlopen
 from server import window
 from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
 import webbrowser
 from tkinter import ttk
+from xml.etree import ElementTree
 
 from mail import *
 import server
@@ -182,19 +184,21 @@ def event_for_listbox(event):   # command for list box
         data = event.widget.get(index)
 
         # 클릭 시, 정보 출력
-        from xml.etree import ElementTree
-        with open('경기도병원현황.xml', 'rb') as f:
-            strXml = f.read().decode('utf-8')
-        parseData = ElementTree.fromstring(strXml)
+        key = "8a2e77d6b1a846d1a28fff0ca47f1215"
+        url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
 
-        elements = parseData.iter('row')
+        res_body = urlopen(url).read()
+        strXml = res_body.decode('utf-8')
+        tree = ElementTree.fromstring(strXml)
+
+        elements = tree.iter("row")
 
         info = "null"
         for item in elements:   # 'row' element들
             if item.find('BIZPLC_NM').text == data:
                 info = '[병원명]' + '\n' + getStr(item.find('BIZPLC_NM').text) + \
                 '\n\n' + '[의료기관종별명]' + '\n' + getStr(item.find('MEDINST_ASORTMT_NM').text) + \
-                '\n\n' + '[전화번호]' + '\n' + getStr(item.find('LOCPLC_FACLT_TELNO_DTLS').text) + \
+                '\n\n' + '[전화번호]' + '\n' + getStr(item.find('LOCPLC_FACLT_TELNO').text) + \
                 '\n\n' + '[도로명 주소]' + '\n' +getStr(item.find('REFINE_ROADNM_ADDR').text)  + \
                 '\n\n' + '[지번 주소]' + '\n' +getStr(item.find('REFINE_LOTNO_ADDR').text)  + \
                 '\n\n' + '[진료 과목]' + '\n' +getStr(item.find('TREAT_SBJECT_CONT_INFO').text)  + \
@@ -243,21 +247,31 @@ def getStr(s):  # utitlity function: 문자열 내용 있을 때만 사용
     return '정보없음' if not s else s
 
 def SearchHospital(city = '', dept = ''): 
-    from xml.etree import ElementTree
 
     global listBox
     listBox.delete(0, listBox.size())
 
-    with open('경기도병원현황.xml', 'rb') as f:
-        strXml = f.read().decode('utf-8')
-    parseData = ElementTree.fromstring(strXml)
+    # 1. XML 파일 사용 방식
+    # with open('경기도병원현황.xml', 'rb') as f:
+    #     strXml = f.read().decode('utf-8')
+    # parseData = ElementTree.fromstring(strXml)
 
-    elements = parseData.iter('row')
+    # elements = parseData.iter('row')
 
+    # 2. REST API 사용 방식
+    key = "8a2e77d6b1a846d1a28fff0ca47f1215"
+    url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
+
+    res_body = urlopen(url).read()
+    strXml = res_body.decode('utf-8')
+    tree = ElementTree.fromstring(strXml)
+
+    elements = tree.iter("row")
+    
     i = 1
     for item in elements:   # 'row' element들
         part_el = item.find('BIZPLC_NM')
-        
+
         if InputLabel.get() not in part_el.text:
             continue
         
@@ -287,9 +301,6 @@ def SearchHospital(city = '', dept = ''):
             
             listBox.insert(i-1, _text)
             i = i + 1
-
-        if item.find('BIZPLC_NM').text == '의료법인대성의료재단 한림예요양병원':
-            print(i)
 
 # === main ====
 if __name__ == '__main__':
