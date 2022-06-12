@@ -1,6 +1,6 @@
 # === import ===
 from server import window
-from tkinter import *
+0from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
 import webbrowser
