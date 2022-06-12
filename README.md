@@ -1,7 +1,6 @@
 # 어디병원: Where The Hospital
 ![logo](https://user-images.githubusercontent.com/89962345/173218210-ca651684-be63-4a68-974b-10cf2c18b40a.png)
-#### 한국공학대학교 게임공학과 2022학년도 1학기 스크립트 언어 텀프로젝트입니다.
-
+#### 한국공학대학교 게임공학과 2022학년도 1학기 스크립트 언어 과목의 Term Project입니다.
 
 ## 목차
 - [프로그램 개요](#프로그램-개요)
@@ -16,8 +15,17 @@
   - [7. 지도](#지도)
   - [8. GUI 내 텔레그램 보내기](#gui-내-텔레그램-보내기)
   - [9. 텔레그램 봇](#텔레그램-봇)
-- [프로그램 모듈](프로그램-모듈)
-- 권고사항
+- [프로그램 모듈](#프로그램-모듈)
+  - [1. where_hospital](#where_hospital)
+  - [2. book_mark](#book_mark)
+  - [3. gmail_send](#gmail_send)
+  - [4. graph](#graph)
+  - [5. link](#link)
+  - [6. map](#map)
+  - [7. telegram](#telegram)
+  - [8. telegram_bot](#telegram_bot)
+  - [9. server](#server)
+- 유의사항
 - 기타
 
 
@@ -113,7 +121,7 @@
 
 ## 프로그램 모듈
 ### where_hospital
-- 어디병원의 메인 모듈
+- **어디병원의 메인 모듈**
 - 메인 GUI 창을 시작하고, 필터에 따라 검색하는 기능을 가지고 있습니다.
 - 검색한 병원의 정보를 서버에 넘기는 역할을 합니다.
 - 내장 함수
@@ -174,7 +182,7 @@
 ### telegram
 - 런처에서 텔레그램 버튼을 누르면 실행되는 모듈입니다.
 - 내장 함수
-  - sendSelectedInfo: 선택된 병원의 정보를 텔레그램으로 보내는 함수입니다.
+  - sendSelectedInfo: 선택된 병원의 정보를 텔레그램으로 보냄
 
 ### telegram_bot
 - **텔레그램 메인 모듈**입니다.
@@ -184,6 +192,41 @@
 - 모듈 간 데이터의 공유를 돕는 모듈입니다.
 - 내장 함수를 가지고 있지 않습니다.
 - 각 모듈에서 단순히 server를 import하면 필요한 정보를 제공받을 수 있습니다.
+
+## 유의사항
+### 1. 설치 후 **font** 폴더 내의 폰트를 모두 설치하는 것을 권고합니다.
+미설치 시, 미관상 좋지 않거나 pack으로 생성된 GUI의 규격이 맞지 않을 가능성이 있습니다.
+### 2. cLink.pyd 파일을 파이썬의 Lib 폴더 내에 복사하는 것을 권고합니다.
+- 해당 프로그램의 북마크 기능의 경우, C/C++ 연동이 되어있습니다.
+- 다음과 같이, 입력된 문자열(한/영 혼합)의 문자 개수를 세어 반환하는 코드가 포함되어 있습니다.
+```c
+static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
+	char* str;
+
+	if (!PyArg_ParseTuple(args, "s", &str))
+		return NULL;
+
+    int size = 0;
+    for (int i = 0;; i++){
+        if (str[i] & 0x80){
+            size++;
+            i += 2;
+        }
+        else if (str[i] == '\0') break;
+        else                  
+            size++;
+    } 
+	return Py_BuildValue("i", size);
+}
+```
+
+- cLink.pyd 파일 미추가 시 오류가 발생하진 않지만, 작성한 메모의 문자 개수를 알 수 없습니다.
+
+|파일 추가 시 알림 내용|파일 미추가 시 알림 내용|
+|--|--|
+|![withSave](https://user-images.githubusercontent.com/89962345/173222002-968f4e3b-9b8c-4562-92b3-ea9ad6229eb8.png)|![withoutSave](https://user-images.githubusercontent.com/89962345/173222006-fb4e537d-955a-4e5a-81a6-be786e721e81.png)|
+
+
 
 
 
