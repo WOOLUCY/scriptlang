@@ -7,7 +7,6 @@ functions
 - onNaverLink
 - onGoogleLink
 - onNaverMapLink
-- onNaverMapLink
 '''
 
 # === import ===
