@@ -1,0 +1,10 @@
+﻿  cLinkModule.c
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1371,5): warning MSB8012: TargetPath(D:\scriptlang\TermProject\Source\cLink\x64\Release\cLink.dll)이(가) Linker의 OutputFile 속성 값(D:\scriptlang\TermProject\Source\cLink\x64\Release\cLink.pyd)과 일치하지 않습니다. 이로 인해 프로젝트가 잘못 빌드될 수 있습니다. 이를 수정하려면 $(OutDir), $(TargetName) 및 $(TargetExt) 속성 값이 %(Link.OutputFile)에 지정된 값과 일치해야 합니다.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1372,5): warning MSB8012: TargetExt(.dll)이(가) Linker의 OutputFile 속성 값(.pyd)과 일치하지 않습니다. 이로 인해 프로젝트가 잘못 빌드될 수 있습니다. 이를 수정하려면 $(OutDir), $(TargetName) 및 $(TargetExt) 속성 값이 %(Link.OutputFile)에 지정된 값과 일치해야 합니다.
+     D:\scriptlang\TermProject\Source\cLink\x64\Release\cLink.lib 라이브러리 및 D:\scriptlang\TermProject\Source\cLink\x64\Release\cLink.exp 개체를 생성하고 있습니다.
+  코드를 생성하고 있습니다.
+  1 of 2 functions (50.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  cLink.vcxproj -> D:\scriptlang\TermProject\Source\cLink\x64\Release\cLink.dll

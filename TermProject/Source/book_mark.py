@@ -7,6 +7,9 @@ from tkinter import *
 from tkinter import font
 import tkinter.scrolledtext as st
 
+# C/C++ 연동
+import cLink
+
 selHospital = None
 
 def onMarkPopup():
@@ -120,6 +123,10 @@ def makeBookMark():
                 f.close()
 
                 print(server.MarkDict)
+
+            # C/C++ 연동
+            text = "성공적으로 북마크를 저장했습니다.\n메모 글자수: " + str(cLink.strlen(server.memo_text)) + "자"
+            msgbox.showinfo("알림", text)
 
     else:
         msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")
