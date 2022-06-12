@@ -230,7 +230,7 @@ static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
 ## 발표 영상
 - [기획 발표](https://www.youtube.com/watch?v=B3Ki9xvumqw)
 - [중간 발표](https://youtu.be/fD1uGRC4z8g)
-- 최종 발표
+- [최종 발표](https://youtu.be/TA53IUPUEog)
 
 
 
