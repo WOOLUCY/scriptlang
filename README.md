@@ -1,7 +1,7 @@
 # 어디병원: Where The Hospital
 ![logo](https://user-images.githubusercontent.com/89962345/173218210-ca651684-be63-4a68-974b-10cf2c18b40a.png)
 #### 한국공학대학교 게임공학과 2022학년도 1학기 스크립트 언어 과목의 Term Project입니다.
-Contributos: [우정연](https://github.com/WOOLUCY), [강경천](https://github.com/KangGyeongCheon)
+Contributors: [우정연](https://github.com/WOOLUCY), [강경천](https://github.com/KangGyeongCheon)
 
 ## 목차
 - [프로그램 개요](#프로그램-개요)
