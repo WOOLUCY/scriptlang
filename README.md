@@ -1,6 +1,7 @@
 # 어디병원: Where The Hospital
 ![logo](https://user-images.githubusercontent.com/89962345/173218210-ca651684-be63-4a68-974b-10cf2c18b40a.png)
 #### 한국공학대학교 게임공학과 2022학년도 1학기 스크립트 언어 과목의 Term Project입니다.
+Contributos: [우정연](https://github.com/WOOLUCY), [강경천](https://github.com/KangGyeongCheon)
 
 ## 목차
 - [프로그램 개요](#프로그램-개요)
@@ -25,8 +26,8 @@
   - [7. telegram](#telegram)
   - [8. telegram_bot](#telegram_bot)
   - [9. server](#server)
-- 유의사항
-- 기타
+- [유의사항](#유의사항)
+- [발표 영상](#발표-영상)
 
 
 ## 프로그램 개요
@@ -225,6 +226,11 @@ static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
 |파일 추가 시 알림 내용|파일 미추가 시 알림 내용|
 |--|--|
 |![withSave](https://user-images.githubusercontent.com/89962345/173222002-968f4e3b-9b8c-4562-92b3-ea9ad6229eb8.png)|![withoutSave](https://user-images.githubusercontent.com/89962345/173222006-fb4e537d-955a-4e5a-81a6-be786e721e81.png)|
+
+## 발표 영상
+- [기획 발표](https://www.youtube.com/watch?v=B3Ki9xvumqw)
+- [중간 발표](https://youtu.be/fD1uGRC4z8g)
+- 최종 발표
 
 
 
