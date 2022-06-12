@@ -1,20 +1,38 @@
+'''
+map.py
+런처에서 지도 버튼을 누르면 실행되는 모듈입니다.
+
+functions
+- onMapPopup
+- onSearch
+- onHospital
+- onSat
+- add_marker_event
+'''
+
+# === import ===
 from tkinter import *
 import server
 import tkintermapview
 from tkinter import font
 import tkinter.messagebox as msgbox
 
-isSatellite = True
+isSatellite = True  # 현재 위성 모드인지, 노말 모드인지 확인하는 플래그
 
-satelliteImage = PhotoImage(file='image/satellite.png')             # satellite map image
-normalImage = PhotoImage(file='image/normal_map.png')               # normal map image
-hospitalImage = PhotoImage(file='image/hospital.png')               # hospital image
-searchImage = PhotoImage(file='image/little_search.png')            # search hospital image
+# === load image ===
+satelliteImage = PhotoImage(file='image/satellite.png')             # 위성 아이콘
+normalImage = PhotoImage(file='image/normal_map.png')               # 기본 지도 아이콘
+hospitalImage = PhotoImage(file='image/hospital.png')               # 병원 아이콘
+searchImage = PhotoImage(file='image/little_search.png')            # 돋보기 아이콘
 
-def onMapPopup():
-    if server.hospital_name == None: 
+# === functions ===
+def onMapPopup():   
+    # 런처에서 지도 버튼을 누를 경우 실행
+    # 선택한 병원의 지도를 보여주는 팝업을 띄움
+    if server.hospital_name == None:     # 예외처리: 사용자가 병원을 선택하지 않고, 버튼을 누를 경우
         msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")
         return
+
     global popup
     popup = Toplevel()
     popup.geometry("800x600+100+100")
@@ -22,7 +40,7 @@ def onMapPopup():
     
     fontNormal = font.Font(popup, size=18, family='G마켓 산스 TTF Medium')
 
-    if server.latitude == 0 and server.longitude == 0:
+    if server.latitude == 0 and server.longitude == 0:      # API에서 병원의 주소 정보를 제공하지 않는 경우
         emptyLabel = Label(popup, width=800, height=600, text="해당 병원의 지도 정보가 없습니다.", font=fontNormal)
         emptyLabel.pack()
 
@@ -33,27 +51,30 @@ def onMapPopup():
         map_widget.place(x=0, y=0, width=800, height=550)
         map_widget.add_right_click_menu_command(label="Add Marker", command=add_marker_event, pass_coords=True)
 
-
         # 주소 위치지정 
         marker_1 = map_widget.set_position(server.latitude, server.longitude, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") # 위도,경도 위치지정
         marker_1.set_text(server.hospital_name) # set new text
 
         global addressLabel, InputButton, HospitalButton, SatButton
+        # 주소 입력 부분
         addressLabel = Entry(popup, font=fontNormal, width=800, borderwidth=3, relief='ridge')
         addressLabel.place(x=0, y=550, width=650, height=50)
 
         InputButton = Button(popup, font=fontNormal, image=searchImage, command=onSearch, bg = "white", cursor="hand2")
         InputButton.place(x=650, y=550, width=50, height=50)   
 
+        # 병원 버튼
         HospitalButton = Button(popup, font=fontNormal, image=hospitalImage, command=onHospital, bg="white", cursor="hand2")
         HospitalButton.place(x=700, y=550, width=50, height=50)   
-
+        # 위성 버튼
         SatButton = Button(popup, font=fontNormal, command=onSat, image=satelliteImage, bg="white", cursor="hand2")
         SatButton.place(x=750, y=550, width=50, height=50)  
 
         map_widget.set_zoom(15) # 0~19 (19 is the highest zoom level) 
 
-def onSearch():
+def onSearch():    
+    # 지도 팝업에서 주소 입력 시 실행
+    # 새 주소에 마커 추가
     global destAddr, marker_2
     destAddr = addressLabel.get()
     marker_2 = map_widget.set_address(destAddr, marker=True, marker_color_outside="black", marker_color_circle="white", text_color="black") 
@@ -66,11 +87,11 @@ def onSearch():
 
     map_widget.set_zoom(15)
 
-def onHospital():
+def onHospital():   # 원래 병원 위치로 이동하는 함수
     map_widget.set_zoom(15)
     map_widget.set_position(marker_1.position[0], marker_1.position[1])
 
-def onSat():
+def onSat():        # 지도를 위성 지도로 바꾸는 함수
     global isSatellite
     if isSatellite:
         isSatellite = False
@@ -83,7 +104,7 @@ def onSat():
         map_widget.set_zoom(15)
         SatButton.configure(image=satelliteImage)
     
-def add_marker_event(coords):
+def add_marker_event(coords):       # 마우스 우클릭으로 마커를 추가하는 함수
     print("Add marker:", coords)
     new_marker = map_widget.set_marker(coords[0], coords[1], text="new marker")
     map_widget.set_path([coords, marker_1.position])

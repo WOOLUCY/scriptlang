@@ -1,3 +1,7 @@
+'''
+setup.py
+distutils 모듈을 사용해 배포 파일을 생성하는 파일
+'''
 from distutils.core import setup
 
 setup(

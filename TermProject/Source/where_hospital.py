@@ -1,3 +1,19 @@
+'''
+where_hospital.py
+프로그램의 메인모듈
+
+functions
+- InitScreen
+- setCity
+- setDept
+- resetFilter
+- onSearch
+- getStr
+- saveMemo
+- event_for_listbox
+- SearchHospital
+'''
+
 # === import ===
 from tkinter.tix import NoteBook
 from turtle import bgcolor
@@ -17,37 +33,14 @@ from telegram import *
 from link import *
 from book_mark import *
 
-# === load image ===
-searchImage = PhotoImage(file='image/search.png')               # search image
-filterImage = PhotoImage(file='image/filter_icon.png')          # filter image
-emailImage = PhotoImage(file='image/mail_icon3.png')            # mail image
-mapImage = PhotoImage(file='image/map_icon2.png')               # map image
-emptymarkImage = PhotoImage(file='image/white_bookmark.png')    # mark image
-markImage = PhotoImage(file='image/bookmark.png')    # mark image
-telegramImage = PhotoImage(file='image/telegram_icon.png')      # telegram image
-logoImage = PhotoImage(file='image/logo.gif')                   # logo image
-graphImage = PhotoImage(file='image/trend.png')                 # graph image
-noImage = PhotoImage(file='image/close.png')                    # no image
-labelImage = PhotoImage(file='image/label.png')                 # label image
-googleLinkImage = PhotoImage(file='image/google.png')           # label image
-naverImage = PhotoImage(file='image/naver.png')                 # label image
-naverMapImage = PhotoImage(file='image/google_map.png')         # label image
-
-# === load font ===
-fontNormal = font.Font(window, size=14, family='G마켓 산스 TTF Medium')
-fontLabel= font.Font(window, size=14, family='G마켓 산스 TTF Bold')
-fontInfo = font.Font(window, size=10, family='G마켓 산스 TTF Medium')
-fontList = font.Font(window, size=14, family='G마켓 산스 TTF Medium') 
-
-def InitScreen():
+# === functions ===
+def InitScreen():       # 메인 GUI 창을 시작하는 함수
     # === frame arrangement ===
-    # 절대 배치 관리자 사용
-
     # 분류 제목 레이블 부분
     global CityLabel, NameLabel, DeptLabel
-    CityLabel = Label(window, text="시/군", font=fontLabel, bg = "white", image=labelImage, compound='center')
-    DeptLabel = Label(window, text="진료 과목", font=fontLabel, bg = "white", image=labelImage, compound='center')
-    NameLabel = Label(window, text="병원명", font=fontLabel, bg = "white", image=labelImage, compound='center')
+    CityLabel = Label(window, text="시/군", font=server.fontLabel, bg = "white", image=server.labelImage, compound='center')
+    DeptLabel = Label(window, text="진료 과목", font=server.fontLabel, bg = "white", image=server.labelImage, compound='center')
+    NameLabel = Label(window, text="병원명", font=server.fontLabel, bg = "white", image=server.labelImage, compound='center')
 
     CityLabel.place(x=10, y=10, width=100, height=70)
     DeptLabel.place(x=10, y=90, width=100, height=70)
@@ -56,7 +49,7 @@ def InitScreen():
     # 시(군) 선택 부분
     global CityListBox, clist
     CityScrollbar = Scrollbar(window)
-    CityListBox = Listbox(window, activestyle='dotbox',relief='ridge', font=fontNormal, yscrollcommand=CityScrollbar.set, cursor="hand2") 
+    CityListBox = Listbox(window, activestyle='dotbox',relief='ridge', font=server.fontNormal, yscrollcommand=CityScrollbar.set, cursor="hand2") 
     global selectedCity
     selectedCity = [0]
     CityListBox.bind('<<ListboxSelect>>', setCity)
@@ -73,7 +66,7 @@ def InitScreen():
     # 진료 과목 내용 정보
     global DeptListBox, dlist
     DeptScrollbar = Scrollbar(window)
-    DeptListBox = Listbox(window, activestyle='dotbox', relief='ridge', font=fontNormal, yscrollcommand=DeptScrollbar.set, cursor="hand2") 
+    DeptListBox = Listbox(window, activestyle='dotbox', relief='ridge', font=server.fontNormal, yscrollcommand=DeptScrollbar.set, cursor="hand2") 
     global selectedDept
     selectedDept = [0]
     DeptListBox.bind('<<ListboxSelect>>', setDept)
@@ -87,21 +80,21 @@ def InitScreen():
 
     # 사용자 입력부분
     global InputLabel
-    InputLabel = Entry(window, font=fontNormal, width=36, borderwidth=3, relief='ridge', cursor="xterm")
+    InputLabel = Entry(window, font=server.fontNormal, width=36, borderwidth=3, relief='ridge', cursor="xterm")
     InputLabel.place(x=110, y=170, width=220, height=70)
 
-    InputButton = Button(window, font=fontNormal, image=searchImage, command=onSearch, bg="white",cursor="hand2", overrelief="groove", activebackground= "dark grey")
+    InputButton = Button(window, font=server.fontNormal, image=searchImage, command=onSearch, bg="white",cursor="hand2", overrelief="groove", activebackground= "dark grey")
     InputButton.place(x=110 + 220, y=170, width=70, height=70)
 
     # 필터 초기화 버튼 부분
     global ResetButton
-    ResetButton = Button(window, bg="white", command=resetFilter, font=fontNormal, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]), cursor="hand2", overrelief="sunken")
+    ResetButton = Button(window, bg="white", command=resetFilter, font=server.fontNormal, text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]), cursor="hand2", overrelief="sunken")
     ResetButton.place(x=410, y=90, width=380, height=70 )
 
     # 병원 목록 부분
     global listBox
     ListScrollBar = Scrollbar(window)
-    listBox = Listbox(window, selectmode='extended', font=fontList, width=10, height=15, \
+    listBox = Listbox(window, selectmode='extended', font=server.fontList, width=10, height=15, \
         borderwidth=5, relief='ridge', yscrollcommand=ListScrollBar.set, cursor="hand2")
     listBox.bind('<<ListboxSelect>>', event_for_listbox)
     listBox.place(x = 10, y = 250, width=380 - 10, height=340)
@@ -111,35 +104,35 @@ def InitScreen():
 
     # 로고버튼 부분
     global LogoLabel
-    LogoLable = Button(window, image=logoImage, bg="white", command=onLogo, relief="flat", activebackground= "dark grey", cursor="hand2", overrelief="groove")
+    LogoLable = Button(window, image=server.logoImage, bg="white", command=onLogo, relief="flat", activebackground= "dark grey", cursor="hand2", overrelief="groove")
     LogoLable.place(x=410, y=10, width=380, height=70)
 
     # 그래프버튼 부분
     global GraphButton
-    GraphButton = Button(window, bg="white", image=graphImage, command=onGraphPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
+    GraphButton = Button(window, bg="white", image=server.graphImage, command=onGraphPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     GraphButton.place(x=410, y=170, width=72, height=72)
     
     # 메일버튼 부분
     global MailButton
-    MailButton = Button(window, image=emailImage, bg="white", command=onEmailPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
+    MailButton = Button(window, image=server.emailImage, bg="white", command=onEmailPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     MailButton.place(x=410 + 76, y=170, width=72, height=72)
 
     # 지도버튼 부분
     global MapButton
-    MapButton = Button(window, image=mapImage, bg="white", command=onMapPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
+    MapButton = Button(window, image=server.mapImage, bg="white", command=onMapPopup, activebackground= "dark grey", cursor="hand2", overrelief="sunken")
     MapButton.place(x=410 + 76 * 2, y=170, width=72, height=72)   
 
     # 북마크버튼 부분
     global MarkButton
-    MarkButton = Button(window, image=emptymarkImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=onMarkPopup)
+    MarkButton = Button(window, image=server.emptymarkImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=onMarkPopup)
     MarkButton.place(x=410 + 76 * 3, y=170, width=72, height=72)
 
     # 텔레그램버튼 부분
     global TelegramButton
-    TelegramButton = Button(window, image=telegramImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=sendSelectedInfo)
+    TelegramButton = Button(window, image=server.telegramImage, bg="white", activebackground= "dark grey", cursor="hand2", overrelief="sunken", command=sendSelectedInfo)
     TelegramButton.place(x=410 + 76 * 4, y=170, width=72, height=72)   
 
-    # 정보 부분
+    # 정보 부분 (notebook)
     global InfoLabel, ST, notebook
     style = Style()
     style.theme_use('default')
@@ -149,27 +142,27 @@ def InitScreen():
     notebook = Notebook(window)
     notebook.place(x = 410, y= 250, width=380, height=370 + 48 - 80)
 
-    # notebook page1
-    ST = st.ScrolledText(window, font=fontInfo, cursor="arrow")
+    # notebook page1: 병원 정보 출력
+    ST = st.ScrolledText(window, font=server.fontInfo, cursor="arrow")
     notebook.add(ST, text="Info")
 
-    # notebook page2
+    # notebook page2: 링크 모음
     frame2 = Frame(window, background='white', relief='flat', borderwidth=0)
     notebook.add(frame2, text="Link") 
-    link1 = Button(frame2, image=googleLinkImage, bg='white', relief="flat", command=onGoogleLink, cursor="hand2")
-    link2 = Button(frame2, image=naverImage, bg='white', relief="flat", command=onNaverLink, cursor="hand2")
-    link3 = Button(frame2, image=naverMapImage, bg='white', relief="flat", command=onNaverMapLink, cursor="hand2")
+    link1 = Button(frame2, image=server.googleLinkImage, bg='white', relief="flat", command=onGoogleLink, cursor="hand2")
+    link2 = Button(frame2, image=server.naverImage, bg='white', relief="flat", command=onNaverLink, cursor="hand2")
+    link3 = Button(frame2, image=server.naverMapImage, bg='white', relief="flat", command=onNaverMapLink, cursor="hand2")
 
     link1.pack(pady=20)
     link2.pack(pady=20)
     link3.pack(pady=20)
 
-    # notebook page3
+    # notebook page3: 메모
     global memoST
     frame3 = Frame(window, background='white', relief='flat', borderwidth=0)
-    memoST = st.ScrolledText(frame3, relief='raised', font=fontInfo)
+    memoST = st.ScrolledText(frame3, relief='raised', font=server.fontInfo)
     memoST.place(x=0, y=0, width=380, height=288)
-    memoButton = Button(frame3, text='북마크 저장', command=saveMemo,font=fontInfo, cursor="hand2")
+    memoButton = Button(frame3, text='북마크 저장', command=saveMemo,font=server.fontInfo, cursor="hand2")
     memoButton.place(x=0, y=288, width=380, height=30)
     notebook.add(frame3, text="BookMark")  
 
@@ -181,47 +174,56 @@ def InitScreen():
         f.close()
         server.MarkDict = dic
 
-def saveMemo():
-    if server.hospital_name:
-        server.memo_text = memoST.get("1.0", END)
-        # print (server.memo_text)
-        memoST.delete('1.0', END)
-        makeBookMark()
-
-
-    else:
-        msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")      
-
-def setCity(event): # command for city list box
+def setCity(event): # command for city list box. 시군 필터
     global selectedCity, CityListBox, clist, ResetButton
     sel = event.widget.curselection()
     if sel:
         selectedCity = sel
         ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
 
-def setDept(event): # command for dept list box
+def setDept(event): # command for dept list box. 진료과목 필터
     global selectedDept, ResetButton
     sel = event.widget.curselection()
     if sel:
         selectedDept = sel
         ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))
 
-def resetFilter():  # command for reset button
+def resetFilter():  # command for reset button. 필터 초기화
     global selectedCity, selectedDept, listBox
     selectedCity = [0]
     selectedDept = [0]
     ResetButton.configure(text=getStr(clist[selectedCity[0]]) + "\t\t" + getStr(dlist[selectedDept[0]]))   
     listBox.delete(0, listBox.size())
 
+
+def onSearch():     # command for search button
+    global CityListBox, clist
+    global DeptListBox, dlist
+    global selectedCity, selectedDept
+
+    cIdx = selectedCity[0]
+    dIdx = selectedDept[0]
+
+    SearchHospital(clist[cIdx], dlist[dIdx])
+
+def saveMemo():     # 메모를 저장해 서버로 넘기는 함수
+    if server.hospital_name:
+        server.memo_text = memoST.get("1.0", END)
+        # print (server.memo_text)
+        memoST.delete('1.0', END)
+        makeBookMark()
+    else:
+        msgbox.showinfo("알림", "목록에서 병원을 먼저 선택해주십시오.")      
+
 def event_for_listbox(event):   # command for list box
     global InfoLabel, ST
     selection = event.widget.curselection()
 
-    if selection:
+    if selection:       # 리스트 박스에서 클릭 발생 시
         index = selection[0]
         data = event.widget.get(index)
 
-        # 클릭 시, 정보 출력
+        # REST API에서 해당 이름의 정보 검색 후 출력
         key = "8a2e77d6b1a846d1a28fff0ca47f1215"
         url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
 
@@ -245,43 +247,32 @@ def event_for_listbox(event):   # command for list box
                 '\n\n' + '[병상수]' + '\n' +getStr(item.find('MEDSTAF_CNT').text) 
                 server.hospital_name = getStr(item.find('BIZPLC_NM').text)
                 
+                # 지도를 위해 정보 가져옴
                 if item.find('REFINE_WGS84_LAT').text == None and item.find('REFINE_WGS84_LOGT').text == None:
                     server.latitude = 0.0
                     server.longitude = 0.0    
-                    MapButton.configure(image=noImage)
-                                    
+                    MapButton.configure(image=server.noImage)                                    
                 else:
                     server.latitude = float(item.find('REFINE_WGS84_LAT').text)
                     server.longitude = float(item.find('REFINE_WGS84_LOGT').text)
-                    MapButton.configure(image=mapImage)  
-        
-        if data in server.MarkDict:
-            MarkButton.configure(image=markImage)
-        else:
-            MarkButton.configure(image=emptymarkImage)
+                    MapButton.configure(image=server.mapImage)  
 
+        # 북마크 여부 표시        
+        if data in server.MarkDict:
+            MarkButton.configure(image=server.markImage)
+        else:
+            MarkButton.configure(image=server.emptymarkImage)
+
+        # 선택된 병원 정보 서버로 넘기기
         server.info_text = info
 
+        # 병원 정보 출력
         ST.configure(state="normal")    # 수정 가능으로 풀어놨다가,
         ST.delete('1.0', END)
         ST.insert(INSERT, info)
         ST.configure(state="disabled")  # 수정 불가능(읽기 전용)으로 변경
 
-def onSearch():     # command for search button
-    global CityListBox, clist
-    global DeptListBox, dlist
-    global selectedCity, selectedDept
-
-    cIdx = selectedCity[0]
-    dIdx = selectedDept[0]
-
-    SearchHospital(clist[cIdx], dlist[dIdx])
-
-
-def getStr(s):  # utitlity function: 문자열 내용 있을 때만 사용
-    return '정보없음' if not s else s
-
-def SearchHospital(city = '', dept = ''): 
+def SearchHospital(city = '', dept = ''):       # 리스트 박스 구성을 위해 병원 목록을 만드는 함수
     global listBox
     listBox.delete(0, listBox.size())
 
@@ -336,11 +327,12 @@ def SearchHospital(city = '', dept = ''):
             listBox.insert(i-1, _text)
             i = i + 1
 
-# === main ====
+def getStr(s):  # utitlity function: 문자열 내용 있을 때만 사용
+    return '정보없음' if not s else s
+
 if __name__ == '__main__':
-    print("laucher runned\n")
+    print("main laucher runned\n")
     InitScreen()
     window.mainloop()
 else:
-    print("launcher imported\n")
-    
+    print("main launcher imported\n")
