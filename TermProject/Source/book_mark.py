@@ -20,7 +20,10 @@ from tkinter import font
 import tkinter.scrolledtext as st
 
 # C/C++ 연동
-import cLink
+try:
+    import cLink
+except:
+    pass
 
 selHospital = None
 

@@ -23,7 +23,7 @@ static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
             size++;
     }
     
-	return Py_BuildValue("i", size);
+	return Py_BuildValue("i", size - 1);
 }
 
 // 3. 모듈에 등록할 함수 정의를 담은 배열(__dict__ 속성이 됨) 

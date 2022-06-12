@@ -1,3 +1,17 @@
+'''
+graph.py
+런처에서 그래프 버튼을 누르면 실행되는 모듈입니다.
+
+functions
+- onGraphPopup
+- drawGraph
+- getData
+- mouseClicked
+- onMapPopup
+- getStr
+'''
+
+# === import ===
 from tkinter import *
 import tkintermapview
 from tkinter import font
@@ -5,7 +19,8 @@ from xml.etree import ElementTree
 from urllib.request import urlopen
 import server
 
-def onGraphPopup(): 
+# === functions ===
+def onGraphPopup():     # 런처에서 그래프 버튼을 누르면 실행되는 함수
     global popup
     print("graph button clicked")
     popup = Toplevel()
@@ -22,15 +37,15 @@ def onGraphPopup():
     drawGraph(w, server.hList[1:], 1200, 400)
 
 
-def drawGraph(canvas, data, canvasWidth, canvasHeight):
+def drawGraph(canvas, data, canvasWidth, canvasHeight):     # 받은 데이터에 따라 그래프를 그리는 함수
     fontLittle = font.Font(popup, size=7, family='G마켓 산스 TTF Medium') 
 
-    canvas.delete("grim") # 기존 그림 지우기
-    if not len(data): # 데이터 없으면 return
+    canvas.delete("grim")           # 기존 그림 지우기
+    if not len(data):               # 데이터 없으면 return
         canvas.create_text(canvasWidth/2,(canvasHeight/2), text="No Data", tags="grim")
         return
 
-    nData = len(data) # 데이터 개수, 최대값, 최소값 얻어 놓기
+    nData = len(data)               # 데이터 개수, 최대값, 최소값 얻어 놓기
     nMax = max(data) 
     nMin = min(data)
 
@@ -40,9 +55,9 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
     if nMax == 0: # devide by z
         nMax = 1
 
-    rectWidth = (canvasWidth // nData) # 데이터 1개의 폭. 
-    bottom = canvasHeight - 20 # bar의 bottom 위치 
-    maxheight = canvasHeight - 40 # bar의 최대 높이.(위/아래 각각 20씩 여유.)
+    rectWidth = (canvasWidth // nData)      # 데이터 1개의 폭. 
+    bottom = canvasHeight - 20              # bar의 bottom 위치 
+    maxheight = canvasHeight - 40           # bar의 최대 높이.(위/아래 각각 20씩 여유.)
 
     global leftList, topList
     leftList = []
@@ -54,10 +69,10 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
         elif nMin == data[i]: color='light pink' 
         else: color="ivory2"    
 
-        curHeight = maxheight * data[i] / nMax # 최대값에 대한 비율 반영
-        top = bottom - curHeight # bar의 top 위치
-        left = i * rectWidth # bar의 left 위치
-        right = (i + 1) * rectWidth # bar의 right 위치
+        curHeight = maxheight * data[i] / nMax      # 최대값에 대한 비율 반영
+        top = bottom - curHeight                    # bar의 top 위치
+        left = i * rectWidth                        # bar의 left 위치
+        right = (i + 1) * rectWidth                 # bar의 right 위치
         leftList.append(left)
         topList.append(top)
 
@@ -70,8 +85,7 @@ def drawGraph(canvas, data, canvasWidth, canvasHeight):
 
     leftList.append(1178)
 
-def getData():
-    # 클릭 시, 정보 출력
+def getData():      # REST API에서 데이터를 가져와 시군별 병원의 개수를 세는 함수
     key = "8a2e77d6b1a846d1a28fff0ca47f1215"
     url = "https://openapi.gg.go.kr/GgHosptlM?pSize=1000&pIndex=1&KEY=" + key
 
@@ -86,7 +100,7 @@ def getData():
             if item.find('SIGUN_NM').text == city:
                 server.hList[i] += 1           
 
-def mouseClicked(event):
+def mouseClicked(event):        # 마우스 좌표를 이용해 선택한 시군 정보를 알려주는 함수
     server.mouse_x= event.x
     server.mouse_y= event.y
     for i, left in enumerate(leftList):
@@ -95,13 +109,14 @@ def mouseClicked(event):
                 print(server.city_list[i+1])
                 onMapPopup(server.city_list[i+1])
 
-def onMapPopup(city):
+def onMapPopup(city):           
+    # 바 클릭 시 실행되는 함수
+    # 지도 팝업을 띄움
+    # 선택한 시군 내에 있는 병원(지도 정보가 포함된 병원에 한해) 위치 출력
     global map_popup
     map_popup = Toplevel()
     map_popup.geometry("800x600+100+100")
     map_popup.title("<" + city + "> 내 병원")
-
-    fontNormal = font.Font(map_popup, size=24, family='G마켓 산스 TTF Medium')
 
     global map_widget
     map_widget = tkintermapview.TkinterMapView(map_popup, width=800, height=600, corner_radius=0) 
@@ -124,14 +139,12 @@ def onMapPopup(city):
             marker_1 = map_widget.set_position(lat, logt, \
                 marker=True, marker_color_outside="grey", marker_color_circle="white") # 위도,경도 위치지정
             marker_1.set_text(item.find('BIZPLC_NM').text) # set new text
-
             map_widget.set_zoom(12)
 
-def getStr(s):
+def getStr(s):      # 유틸리티 함수
     return '정보없음' if not s else s
 
 if __name__ == '__main__':
-    onGraphPopup()
     print("graph.py runned\n")
 else:
     print("graph.py imported\n")

@@ -2,7 +2,9 @@
 setup.py
 distutils 모듈을 사용해 배포 파일을 생성하는 파일
 '''
-from distutils.core import setup
+from distutils.core import setup, Extension
+
+module_cLink = Extension('cLink', sources = ['cLinkModule.c'])
 
 setup(
     name='WhereTheHospital',
@@ -13,5 +15,6 @@ setup(
     packages=['image', 'font'],
     package_data={
         'image': ['*.png', '*.html','*.jpg','*.gif'],
-        'font': ['*.ttf']},
+        'font': ['*.ttf']},    
+    ext_modules=[module_cLink]
 )
