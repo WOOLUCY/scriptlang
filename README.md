@@ -1,7 +1,7 @@
 # 어디병원: Where The Hospital
 ![logo](https://user-images.githubusercontent.com/89962345/173218210-ca651684-be63-4a68-974b-10cf2c18b40a.png)
 #### 한국공학대학교 게임공학과 2022학년도 1학기 스크립트 언어 과목의 Term Project입니다.
-Contributos: [우정연](https://github.com/WOOLUCY), [강경천](https://github.com/KangGyeongCheon)
+Contributors: [우정연](https://github.com/WOOLUCY), [강경천](https://github.com/KangGyeongCheon)
 
 ## 목차
 - [프로그램 개요](#프로그램-개요)
@@ -197,7 +197,7 @@ Contributos: [우정연](https://github.com/WOOLUCY), [강경천](https://github
 ## 유의사항
 ### 1. 설치 후 **font** 폴더 내의 폰트를 모두 설치하는 것을 권고합니다.
 미설치 시, 미관상 좋지 않거나 pack으로 생성된 GUI의 규격이 맞지 않을 가능성이 있습니다.
-### 2. cLink.pyd 파일을 파이썬의 Lib 폴더 내에 복사하는 것을 권고합니다.
+### 2. book_mark 모듈은 C/C++ 연동을 사용합니다.
 - 해당 프로그램의 북마크 기능의 경우, C/C++ 연동이 되어있습니다.
 - 다음과 같이, 입력된 문자열(한/영 혼합)의 문자 개수를 세어 반환하는 코드가 포함되어 있습니다.
 ```c
@@ -220,10 +220,7 @@ static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
 	return Py_BuildValue("i", size);
 }
 ```
-
-- cLink.pyd 파일 미추가 시 오류가 발생하진 않지만, 작성한 메모의 문자 개수를 알 수 없습니다.
-
-|파일 추가 시 알림 내용|파일 미추가 시 알림 내용|
+|연동 시 알림 내용|미연동 시 알림 내용|
 |--|--|
 |![withSave](https://user-images.githubusercontent.com/89962345/173222002-968f4e3b-9b8c-4562-92b3-ea9ad6229eb8.png)|![withoutSave](https://user-images.githubusercontent.com/89962345/173222006-fb4e537d-955a-4e5a-81a6-be786e721e81.png)|
 
