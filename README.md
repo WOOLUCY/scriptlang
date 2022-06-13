@@ -224,6 +224,10 @@ static PyObject* cLink_strlen(PyObject* self, PyObject* args) {
 |--|--|
 |![withSave](https://user-images.githubusercontent.com/89962345/173222002-968f4e3b-9b8c-4562-92b3-ea9ad6229eb8.png)|![withoutSave](https://user-images.githubusercontent.com/89962345/173222006-fb4e537d-955a-4e5a-81a6-be786e721e81.png)|
 
+### 3. 메일보내기 기능은 지메일만 가능합니다.
+- 수신 이메일 주소가 지메일인 경우만 메일을 보낼 수 있습니다.
+- 이메일이 오지 않았다면, 스팸 메일함을 확인해주십시오. 간혹 메일이 스팸으로 처리되는 경우가 있습니다.
+
 ## 발표 영상
 - [기획 발표](https://www.youtube.com/watch?v=B3Ki9xvumqw)
 - [중간 발표](https://youtu.be/fD1uGRC4z8g)
