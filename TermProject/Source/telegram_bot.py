@@ -290,3 +290,11 @@ def replyAptData(user, loc_param='연천군'):     # 입력한 시군에 해당�
         sendMessage( user, msg ) 
     else: 
         sendMessage( user, '해당하는 데이터가 없습니다.')
+
+def handle(msg):        # 대화에 반응하는 함수
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    if content_type != 'text': 
+        sendMessage(chat_id, '난 텍스트 이외의 메시지는 처리하지 못해요.') 
+        return
+    text = msg['text'] 
+    args = text.split(' ')
